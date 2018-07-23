@@ -1,0 +1,3 @@
+#useful package
+imbalanced-learn    #处理不平衡数据，过采样或降采样
+
