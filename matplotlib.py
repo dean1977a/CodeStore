@@ -42,15 +42,7 @@ def kde_target(var_name, df):
     # Print out average values
     print('Median value for loan that was not repaid = %0.4f' % avg_not_repaid)
     print('Median value for loan that was repaid =     %0.4f' % avg_repaid)
-###########################################################################################################
 
-# kde分布
-f,ax = plt.subplots(figsize=(10,5))
-sns.kdeplot(data_train.loc[(data_train['Survived'] == 0),'Age'] , color='gray',shade=True,label='not survived')
-sns.kdeplot(data_train.loc[(data_train['Survived'] == 1),'Age'] , color='g',shade=True, label='survived')
-plt.title('Age特征分布 - Surviver V.S. Not Survivors', fontsize = 15)
-plt.xlabel("Age", fontsize = 15)
-plt.ylabel('Frequency', fontsize = 15)
 ########################################################################################################
 # 箱型图特征分析
 fig, [ax1,ax2] = plt.subplots(1,2,figsize=(20,6))
