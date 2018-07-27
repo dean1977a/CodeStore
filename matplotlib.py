@@ -1,5 +1,3 @@
-
-
 #多特征与target对比曲线
 plt.figure(figsize = (10, 12))
 
@@ -18,6 +16,27 @@ for i, source in enumerate(['EXT_SOURCE_1', 'EXT_SOURCE_2', 'EXT_SOURCE_3']):
     plt.xlabel('%s' % source); plt.ylabel('Density');
     
 plt.tight_layout(h_pad = 2.5)
+########################################################################################################
+
+# kde分布
+f,ax = plt.subplots(figsize=(10,5))
+sns.kdeplot(data_train.loc[(data_train['Survived'] == 0),'Age'] , color='gray',shade=True,label='not survived')
+sns.kdeplot(data_train.loc[(data_train['Survived'] == 1),'Age'] , color='g',shade=True, label='survived')
+plt.title('Age特征分布 - Surviver V.S. Not Survivors', fontsize = 15)
+plt.xlabel("Age", fontsize = 15)
+plt.ylabel('Frequency', fontsize = 15)
+########################################################################################################
+# 箱型图特征分析
+fig, [ax1,ax2] = plt.subplots(1,2,figsize=(20,6))
+sns.boxplot(x="Pclass", y="Age", data=data_train, ax =ax1)
+sns.swarmplot(x="Pclass", y="Age", data=data_train, ax =ax1)
+sns.kdeplot(data_train.loc[(data_train['Pclass'] == 3),'Age'] , color='b',shade=True, label='Pcalss3',ax=ax2)
+sns.kdeplot(data_train.loc[(data_train['Pclass'] == 1),'Age'] , color='g',shade=True, label='Pclass1',ax=ax2)
+sns.kdeplot(data_train.loc[(data_train['Pclass'] == 2),'Age'] , color='r',shade=True, label='Pclass2',ax=ax2)
+ax1.set_title('Age特征在Pclass下的箱型图', fontsize = 18)
+ax2.set_title("Age特征在Pclass下的kde图", fontsize = 18)
+fig.show()
+
 
 ########################################################################################################
 
