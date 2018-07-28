@@ -83,3 +83,33 @@ for spec in GROUPBY_AGGREGATIONS:
     gc.collect()
 
 X_train.head()
+
+
+############################################################################################
+categorical = pd.get_dummies(bureau.select_dtypes('object'))
+categorical['SK_ID_CURR'] = bureau['SK_ID_CURR']
+categorical.head()
+
+categorical_grouped = categorical.groupby('SK_ID_CURR').agg(['sum', 'mean'])
+categorical_grouped.head()
+
+group_var = 'SK_ID_CURR'
+
+# Need to create new column names
+columns = []
+
+# Iterate through the variables names
+for var in categorical_grouped.columns.levels[0]:
+    # Skip the grouping variable
+    if var != group_var:
+        # Iterate through the stat names
+        for stat in ['count', 'count_norm']:
+            # Make a new column name for the variable and stat
+            columns.append('%s_%s' % (var, stat))
+
+#  Rename the columns
+categorical_grouped.columns = columns
+
+categorical_grouped.head()
+
+##########################################################################################
