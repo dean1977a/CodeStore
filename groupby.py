@@ -86,30 +86,50 @@ X_train.head()
 
 
 ############################################################################################
-categorical = pd.get_dummies(bureau.select_dtypes('object'))
-categorical['SK_ID_CURR'] = bureau['SK_ID_CURR']
-categorical.head()
+def count_categorical(df, group_var, df_name):
+    """Computes counts and normalized counts for each observation
+    of `group_var` of each unique category in every categorical variable
+    
+    Parameters
+    --------
+    df : dataframe 
+        The dataframe to calculate the value counts for.
+        
+    group_var : string
+        The variable by which to group the dataframe. For each unique
+        value of this variable, the final dataframe will have one row
+        
+    df_name : string
+        Variable added to the front of column names to keep track of columns
 
-categorical_grouped = categorical.groupby('SK_ID_CURR').agg(['sum', 'mean'])
-categorical_grouped.head()
+    
+    Return
+    --------
+    categorical : dataframe
+        A dataframe with counts and normalized counts of each unique category in every categorical variable
+        with one row for every unique value of the `group_var`.
+        
+    """
+    
+    # Select the categorical columns
+    categorical = pd.get_dummies(df.select_dtypes('object'))
 
-group_var = 'SK_ID_CURR'
+    # Make sure to put the identifying id on the column
+    categorical[group_var] = df[group_var]
 
-# Need to create new column names
-columns = []
-
-# Iterate through the variables names
-for var in categorical_grouped.columns.levels[0]:
-    # Skip the grouping variable
-    if var != group_var:
-        # Iterate through the stat names
+    # Groupby the group var and calculate the sum and mean
+    categorical = categorical.groupby(group_var).agg(['sum', 'mean'])
+    
+    column_names = []
+    
+    # Iterate through the columns in level 0
+    for var in categorical.columns.levels[0]:
+        # Iterate through the stats in level 1
         for stat in ['count', 'count_norm']:
-            # Make a new column name for the variable and stat
-            columns.append('%s_%s' % (var, stat))
-
-#  Rename the columns
-categorical_grouped.columns = columns
-
-categorical_grouped.head()
-
+            # Make a new column name
+            column_names.append('%s_%s_%s' % (df_name, var, stat))
+    
+    categorical.columns = column_names
+    
+    return categorical
 ##########################################################################################
