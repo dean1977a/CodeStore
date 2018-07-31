@@ -1,0 +1,22 @@
+#All functions
+
+#FUNCTION FOR PROVIDING FEATURE SUMMARY
+def feature_summary(df_fa):
+    print('DataFrame shape')
+    print('rows:',df_fa.shape[0])
+    print('cols:',df_fa.shape[1])
+    col_list=['Null','Unique_Count','Data_type','Max/Min','Mean','Std','Skewness','Sample_values']
+    df=pd.DataFrame(index=df_fa.columns,columns=col_list)
+    df['Null']=list([len(df_fa[col][df_fa[col].isnull()]) for i,col in enumerate(df_fa.columns)])
+    #df['%_Null']=list([len(df_fa[col][df_fa[col].isnull()])/df_fa.shape[0]*100 for i,col in enumerate(df_fa.columns)])
+    df['Unique_Count']=list([len(df_fa[col].unique()) for i,col in enumerate(df_fa.columns)])
+    df['Data_type']=list([df_fa[col].dtype for i,col in enumerate(df_fa.columns)])
+    for i,col in enumerate(df_fa.columns):
+        if 'float' in str(df_fa[col].dtype) or 'int' in str(df_fa[col].dtype):
+            df.at[col,'Max/Min']=str(round(df_fa[col].max(),2))+'/'+str(round(df_fa[col].min(),2))
+            df.at[col,'Mean']=df_fa[col].mean()
+            df.at[col,'Std']=df_fa[col].std()
+            df.at[col,'Skewness']=df_fa[col].skew()
+        df.at[col,'Sample_values']=list(df_fa[col].unique())
+           
+    return(df.fillna('-'))
