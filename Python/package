@@ -1,6 +1,8 @@
 #useful package
 scikit-learn-contrib/imbalanced-learn    #处理不平衡数据，过采样或降采样
 scikit-learn-contrib/categorical-encoding   #类别变量编码
-mlens                                     #Model Ensemble
+
 StackNet                                  #Model Ensemble
+mlxtend                                   #Model Ensemble
+mlens                                     #Model Ensemble
 
