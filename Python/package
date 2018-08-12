@@ -6,7 +6,9 @@ AutoSKlearn                                 #sklearn超参数自动调优
 TPOP                                        #遗传算法参数自动调优
 H2O                                       
 
+steppy                                    #pipeline
+
 StackNet                                  #Model Ensemble
 mlxtend                                   #Model Ensemble
 mlens                                     #Model Ensemble
-
+vecstack                                  #Model Ensemble
