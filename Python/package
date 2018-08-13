@@ -3,12 +3,17 @@ scikit-learn-contrib/imbalanced-learn       #处理不平衡数据，过采样�
 scikit-learn-contrib/categorical-encoding   #类别变量编码
 AutoWEKA                                    #选择机器学习算法及其超参数的方法
 AutoSKlearn                                 #自动选择scikit-learn机器学习模型和参数
+AutoKeras                                   #自动神经网络
 TPOT                                        #自动选择scikit-learn机器学习模型和参数
 H2O                                       
 hyperopt                                    #贝叶斯自动参数调优
 BayesianOptimization                        #贝叶斯自动参数调优
 
 steppy                                    #pipeline
+
+facets                                    #机器学习可视化
+
+
 
 StackNet                                  #Model Ensemble
 mlxtend                                   #Model Ensemble
