@@ -2,9 +2,11 @@
 scikit-learn-contrib/imbalanced-learn       #处理不平衡数据，过采样或降采样
 scikit-learn-contrib/categorical-encoding   #类别变量编码
 AutoWEKA                                    #选择机器学习算法及其超参数的方法
-AutoSKlearn                                 #sklearn超参数自动调优
-TPOP                                        #遗传算法参数自动调优
+AutoSKlearn                                 #自动选择scikit-learn机器学习模型和参数
+TPOT                                        #自动选择scikit-learn机器学习模型和参数
 H2O                                       
+hyperopt                                    #贝叶斯自动参数调优
+BayesianOptimization                        #贝叶斯自动参数调优
 
 steppy                                    #pipeline
 
