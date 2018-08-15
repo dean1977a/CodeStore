@@ -10,14 +10,14 @@ hyperopt                                    #贝叶斯自动参数调优
 BayesianOptimization                        #贝叶斯自动参数调优
 
 steppy                                    #pipeline
+Speedml/speedml                           #快速EDA工具
 
 facets                                    #机器学习可视化
 ContextLab / hypertools                   #高纬度数据可视化工具
 slundberg/shap                            #解释任何机器学习模型的输出
 
+
 MarkPKCollier/NeuralTuringMachine         #神经图灵机代码复现，记忆增强神经网络MANN，类比LSTM
-
-
 
 StackNet                                  #Model Ensemble
 mlxtend                                   #Model Ensemble
