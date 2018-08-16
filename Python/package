@@ -23,3 +23,7 @@ StackNet                                  #Model Ensemble
 mlxtend                                   #Model Ensemble
 mlens                                     #Model Ensemble
 vecstack                                  #Model Ensemble
+
+
+
+oracle/graphpipe                          #Dead Simple ML Model Serving via a Standard Protocol 模型部署
