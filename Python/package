@@ -22,6 +22,8 @@ zlkanata/DeepGlobe-Road-Extraction-Challenge  #D-LinkNet: LinkNet with Pretraine
                                               Dilated Convolution for High Resolution Satellite I
                                               magery Road Extraction  
                                               支持翻转、倾斜图像，可能在图像识别比赛用得着
+ozan-oktay/Attention-Gated-Networks       #Use of Attention Gates in a Convolutional Neural Network 
+                                           / Medical Image Classification and Segmentation
                                               
 StackNet                                  #Model Ensemble
 mlxtend                                   #Model Ensemble
