@@ -18,7 +18,11 @@ slundberg/shap                            #解释任何机器学习模型的输�
 
 
 MarkPKCollier/NeuralTuringMachine         #神经图灵机代码复现，记忆增强神经网络MANN，类比LSTM
-
+zlkanata/DeepGlobe-Road-Extraction-Challenge  #D-LinkNet: LinkNet with Pretrained Encoder and 
+                                              Dilated Convolution for High Resolution Satellite I
+                                              magery Road Extraction  
+                                              支持翻转、倾斜图像，可能在图像识别比赛用得着
+                                              
 StackNet                                  #Model Ensemble
 mlxtend                                   #Model Ensemble
 mlens                                     #Model Ensemble
