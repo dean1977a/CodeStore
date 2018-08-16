@@ -8,7 +8,7 @@ TPOT                                        #自动选择scikit-learn机器学�
 H2O                                       
 hyperopt                                    #贝叶斯自动参数调优
 BayesianOptimization                        #贝叶斯自动参数调优
-
+IndicoDataSolutions/finetune                #Scikit-learn style model finetuning for NLP
 steppy                                    #pipeline
 Speedml/speedml                           #快速EDA工具
 
