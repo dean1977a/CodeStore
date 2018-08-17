@@ -24,6 +24,13 @@ zlkanata/DeepGlobe-Road-Extraction-Challenge  #D-LinkNet: LinkNet with Pretraine
                                               支持翻转、倾斜图像，可能在图像识别比赛用得着
 ozan-oktay/Attention-Gated-Networks       #Use of Attention Gates in a Convolutional Neural Network 
                                            / Medical Image Classification and Segmentation
+                     
+fchollet/deep-learning-models             #预训练模型
+facebookresearch/Detectron                #图像识别
+matterport/Mask_RCNN                      #图像识别
+
+OlafenwaMoses/ImageAI                     #图像识别
+
                                               
 StackNet                                  #Model Ensemble
 mlxtend                                   #Model Ensemble
