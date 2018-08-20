@@ -391,3 +391,43 @@ def feature_aggregator_on_df_selected(df,
         time.time() - t))
 
     return to_return
+
+#################################################################################
+aggs1 = ['mean', 'median', 'min', 'max', 'count', 'std', 'sem', 'sum', 'mad']
+aggs2 = ['mean', 'median', 'min', 'max', 'count', 'std', 'sem', 'sum']
+
+aggs_num_basic = ['mean', 'min', 'max', 'std', 'sem', 'sum']
+aggs_cat_basic = ['mean', 'std', 'sum']
+
+aggs_num = aggs_num_basic
+aggs_cat = aggs_cat_basic
+
+################################################################################
+%%time
+
+prev = pd.read_csv("../input/previous_application.csv")
+prev = prev.drop(['SK_ID_PREV'], axis=1)
+
+prev['DAYS_FIRST_DRAWING'].replace(365243, np.nan, inplace= True)
+prev['DAYS_FIRST_DUE'].replace(365243, np.nan, inplace= True)
+prev['DAYS_LAST_DUE_1ST_VERSION'].replace(365243, np.nan, inplace= True)
+prev['DAYS_LAST_DUE'].replace(365243, np.nan, inplace= True)
+prev['DAYS_TERMINATION'].replace(365243, np.nan, inplace= True)
+prev['APP_CREDIT_PERC'] = prev['AMT_APPLICATION'] / prev['AMT_CREDIT']
+
+
+num_aggregations = {
+        'AMT_ANNUITY': ['min', 'max', 'mean'],
+        'AMT_APPLICATION': ['min', 'max', 'mean'],
+        'AMT_CREDIT': ['min', 'max', 'mean'],
+        'APP_CREDIT_PERC': ['min', 'max', 'mean', 'var'],
+        'AMT_DOWN_PAYMENT': ['min', 'max', 'mean'],
+        'AMT_GOODS_PRICE': ['min', 'max', 'mean'],
+        'HOUR_APPR_PROCESS_START': ['min', 'max', 'mean'],
+        'RATE_DOWN_PAYMENT': ['min', 'max', 'mean'],
+        'DAYS_DECISION': ['min', 'max', 'mean'],
+        'CNT_PAYMENT': ['mean', 'sum'],
+    }
+
+prev_selected_aggs = feature_aggregator_on_df_selected(
+    prev, num_aggregations, to_group=['SK_ID_CURR'], prefix='prev', suffix='basic_selected', save=False)
