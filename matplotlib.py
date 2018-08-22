@@ -193,3 +193,16 @@ def numeric(col):
     plt.figure(figsize=(12,5))
     plt.title("Distribution of "+col)
     ax = sns.distplot(application[col].dropna())
+#######################################################################################################
+#将类别变量里面的子类别绘制成柱状图
+def plot_categorical(data, col, size=[8 ,4], xlabel_angle=0, title=''):
+    '''use this for ploting the count of categorical features'''
+    plotdata = data[col].value_counts()
+    plt.figure(figsize = size)
+    sns.barplot(x = plotdata.index, y=plotdata.values)
+    plt.title(title)
+    if xlabel_angle!=0: 
+        plt.xticks(rotation=xlabel_angle)
+    plt.show()
+       
+plot_categorical(data=application_train, col='TARGET', size=[8 ,4], xlabel_angle=0, title='train set: label')
