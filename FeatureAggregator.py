@@ -1,3 +1,4 @@
+#https://www.kaggle.com/wrosinski/featureaggregator-end-to-end-feature-engineering
 class FeatureAggregator(object):
 
     """Feature aggregator - automated feature aggregation method.
