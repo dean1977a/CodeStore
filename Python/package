@@ -11,6 +11,7 @@ BayesianOptimization                        #贝叶斯自动参数调优
 IndicoDataSolutions/finetune                #Scikit-learn style model finetuning for NLP
 steppy                                    #pipeline
 Speedml/speedml                           #快速EDA工具
+instacart/lore                            #pipeline工具集合，开发进度还不错
 plotly/dash                               #a Python framework for building analytical web applications.
 facets                                    #机器学习可视化
 ContextLab / hypertools                   #高纬度数据可视化工具
