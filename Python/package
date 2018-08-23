@@ -29,6 +29,7 @@ ozan-oktay/Attention-Gated-Networks       #Use of Attention Gates in a Convoluti
 fchollet/deep-learning-models             #预训练模型
 facebookresearch/Detectron                #图像识别
 matterport/Mask_RCNN                      #图像识别
+zepingyu0512/srnn                         #切片RNN，比RNN结构快135倍
 
 OlafenwaMoses/ImageAI                     #图像识别
 
