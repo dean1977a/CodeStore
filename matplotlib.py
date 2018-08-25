@@ -55,6 +55,19 @@ ax1.set_title('Age特征在Pclass下的箱型图', fontsize = 18)
 ax2.set_title("Age特征在Pclass下的kde图", fontsize = 18)
 fig.show()
 
+########################################################################################################
+#类别型变量与Target关系图，可画出每个子类别
+def plot_re(df,t1='',t2=''):
+    f,ax=plt.subplots(1,2,figsize=(10,6))
+    df[[t1,t2]].groupby([t1]).count().plot.bar(ax=ax[0],color='Green')
+    ax[0].set_title('count of customer Based on'+t1)
+    sns.countplot(t1,hue=t2,data=df,ax=ax[1],palette="spring")
+    ax[1].set_title(t1+': Repayer vs Defualter')
+    # Rotate x-labels
+    plt.xticks(rotation=-90)
+    a=plt.show()
+    return a
+
 
 ########################################################################################################
 
