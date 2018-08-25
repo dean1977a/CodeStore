@@ -1,7 +1,6 @@
 #useful package
 scikit-learn-contrib/imbalanced-learn       #处理不平衡数据，过采样或降采样
 scikit-learn-contrib/categorical-encoding   #类别变量编码
-AutoWEKA                                    #选择机器学习算法及其超参数的方法
 AutoSKlearn                                 #自动选择scikit-learn机器学习模型和参数
 AutoKeras                                   #自动神经网络
 TPOT                                        #自动选择scikit-learn机器学习模型和参数
@@ -9,7 +8,8 @@ reiinakano/xcessiv                          #可视化hyperparameter tuning and 
 h2oai/h2o-3                                 #一个用Java编写的机器学习平台，包含一个自动机器学习模块                                     
 hyperopt                                    #贝叶斯自动参数调优
 BayesianOptimization                        #贝叶斯自动参数调优
-ray-project/ray                             #超参数优化库，主要适用于深度学习和强化学习模型     
+ray-project/ray                             #超参数优化库，主要适用于深度学习和强化学习模型
+scikit-learn-contrib/boruta_py              #Brouta特征降维策略，保留对模型有显著贡献的所有特征 
 
 
 
