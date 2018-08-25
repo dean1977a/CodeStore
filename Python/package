@@ -5,21 +5,26 @@ AutoWEKA                                    #选择机器学习算法及其超�
 AutoSKlearn                                 #自动选择scikit-learn机器学习模型和参数
 AutoKeras                                   #自动神经网络
 TPOT                                        #自动选择scikit-learn机器学习模型和参数
-H2O                                       
+reiinakano/xcessiv                          #可视化hyperparameter tuning and stacked ensembling ，与TPOT库的集成
+h2oai/h2o-3                                 #一个用Java编写的机器学习平台，包含一个自动机器学习模块                                     
 hyperopt                                    #贝叶斯自动参数调优
 BayesianOptimization                        #贝叶斯自动参数调优
-IndicoDataSolutions/finetune                #Scikit-learn style model finetuning for NLP
+ray-project/ray                             #超参数优化库，主要适用于深度学习和强化学习模型     
+
+
+
 steppy                                    #pipeline
 Speedml/speedml                           #快速EDA工具
 instacart/lore                            #pipeline工具集合，开发进度还不错
 AxeldeRomblay/MLBox                       #自动机器学习工具库
+                 
 
 plotly/dash                               #a Python framework for building analytical web applications.
 facets                                    #机器学习可视化
 ContextLab / hypertools                   #高纬度数据可视化工具
 slundberg/shap                            #解释任何机器学习模型的输出
 
-
+IndicoDataSolutions/finetune                #Scikit-learn style model finetuning for NLP
 MarkPKCollier/NeuralTuringMachine         #神经图灵机代码复现，记忆增强神经网络MANN，类比LSTM
 zlkanata/DeepGlobe-Road-Extraction-Challenge  #D-LinkNet: LinkNet with Pretrained Encoder and 
                                               Dilated Convolution for High Resolution Satellite I
