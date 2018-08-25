@@ -1,0 +1,4 @@
+for c in X.columns:
+    col_type = X[c].dtype
+    if col_type == 'object' or col_type.name == 'category':
+        X[c] = X[c].astype('category')
