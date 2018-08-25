@@ -28,3 +28,18 @@ def missing_values_table(df):
 # Missing values statistics
 missing_values = missing_values_table(app_train)
 missing_values.head(20)
+
+#########################################################################
+def missingdata(data):
+    total = data.isnull().sum().sort_values(ascending = False)
+    percent = (data.isnull().sum()/data.isnull().count()*100).sort_values(ascending = False)
+    ms=pd.concat([total, percent], axis=1, keys=['Total', 'Percent'])
+    ms= ms[ms["Percent"] > 0]
+    f,ax =plt.subplots(figsize=(15,10))
+    plt.xticks(rotation='90')
+    fig=sns.barplot(ms.index, ms["Percent"],color="green",alpha=0.8)
+    plt.xlabel('Features', fontsize=15)
+    plt.ylabel('Percent of missing values', fontsize=15)
+    plt.title('Percent missing data by feature', fontsize=15)
+    #ms= ms[ms["Percent"] > 0]
+    return ms
