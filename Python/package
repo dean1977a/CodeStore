@@ -21,7 +21,6 @@ AxeldeRomblay/MLBox                       #自动机器学习工具库
 
 plotly/dash                               #a Python framework for building analytical web applications.
 altair-viz/altair                         #声明式绘图库，有大量图标样例
-PAIR-code/facets                          #数据可视化工具
 ContextLab / hypertools                   #高纬度数据可视化工具
 slundberg/shap                            #解释任何机器学习模型的输出
 
