@@ -53,4 +53,5 @@ oracle/graphpipe                          #Dead Simple ML Model Serving via a St
 
 quantopian/zipline                        #量化交易软件
 waditu/tushare                            #量化交易软件
+sun0x00/RedTorch                          #基于java的量化交易软件，vnpy移植版
 
