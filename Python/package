@@ -49,3 +49,7 @@ vecstack                                  #Model Ensemble
 
 
 oracle/graphpipe                          #Dead Simple ML Model Serving via a Standard Protocol 模型部署
+
+
+quantopian/zipline                        #量化交易软件
+
