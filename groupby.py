@@ -1,3 +1,32 @@
+
+#https://zhuanlan.zhihu.com/p/36583002
+#先跑一轮，把特征固化到硬盘内。第二轮只是读取硬盘里的特征数据，做特征拼接来减少内存的消耗。
+#这个特征可以引入DataSupport里面最为一个卖点
+GROUPBY_AGGREGATIONS = [
+    {'groupby': ["ip"], 'select': 'app', 'agg': 'nunique'}, 
+    {'groupby': ["ip"], 'select': 'app', 'agg': 'count'}, 
+    ] 
+
+def get_global_feature(feature):
+    print ("get global feat")
+    data = pd.concat([get_basic_data(day=8),get_basic_data(day=9),get_basic_data(day=10)])
+    for spec in tqdm(GROUPBY_AGGREGATIONS):
+        new_feature = '{}_{}_{}'.format('_'.join(spec['groupby']), spec['agg'], spec['select'])
+        result_path = cache_path + new_feature + '%s.hdf'%(data.shape[0])
+        if os.path.exists(result_path):
+            result = pd.read_hdf(result_path, 'w')
+            result[new_feature] = result[new_feature].astype("float32")
+        else:           
+            print("Grouping by {}, and aggregating {} with {}".format(spec['groupby'], spec['select'], agg_name))
+            all_features = list(set(spec['groupby'] + [spec['select']]))
+            result = data[all_features].groupby(spec['groupby'],as_index=False)[spec['select']].agg({new_feature:spec['agg']})
+            result[new_feature] = result[new_feature].astype("float32")
+            result.to_hdf(result_path, 'w', complib='blosc', complevel=5)        
+        feature = feature.merge(result, on=spec['groupby'], how='left'，copy=False)
+    return feature 
+
+
+
 # Define all the groupby transformations
 GROUPBY_AGGREGATIONS = [
     
