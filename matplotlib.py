@@ -243,4 +243,3 @@ def plot_numerical(data, col, size=[8, 4], bins=50):
 plot_numerical(application_train, 'AMT_CREDIT')
 
 #############################################################################################################
-
