@@ -232,7 +232,7 @@ def plot_categorical(data, col, size=[8 ,4], xlabel_angle=0, title=''):
     plt.show()
 #示例       
 plot_categorical(data=application_train, col='TARGET', size=[8 ,4], xlabel_angle=0, title='train set: label')
-
+##############################################################################################################
 #将数值变量绘制成分布图
 def plot_numerical(data, col, size=[8, 4], bins=50):
     '''use this for ploting the distribution of numercial features'''
@@ -243,3 +243,21 @@ def plot_numerical(data, col, size=[8, 4], bins=50):
 plot_numerical(application_train, 'AMT_CREDIT')
 
 #############################################################################################################
+#讲类别变量的子类按照个数画成柱状图
+def plot_categorical_bylabel(data, col, size=[12 ,6], xlabel_angle=0, title=''):
+    '''use it to compare the distribution between label 1 and label 0'''
+    plt.figure(figsize = size)
+    l1 = data.loc[data.TARGET==1, col].value_counts()
+    l0 = data.loc[data.TARGET==0, col].value_counts()
+    plt.subplot(1,2,1)
+    sns.barplot(x = l1.index, y=l1.values)
+    plt.title('Default: '+title)
+    plt.xticks(rotation=xlabel_angle)
+    plt.subplot(1,2,2)
+    sns.barplot(x = l0.index, y=l0.values)
+    plt.title('Non-default: '+title)
+    plt.xticks(rotation=xlabel_angle)
+    plt.show()
+#示例
+plot_categorical_bylabel(application_train, 'CODE_GENDER', title='Gender')
+############################################################################################################
