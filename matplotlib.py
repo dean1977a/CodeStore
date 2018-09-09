@@ -56,6 +56,19 @@ ax2.set_title("Age特征在Pclass下的kde图", fontsize = 18)
 fig.show()
 
 ########################################################################################################
+#类别变量柱状图
+def plot_categorical(data, col, size=[8 ,4], xlabel_angle=0, title=''):
+    '''use this for ploting the count of categorical features'''
+    plotdata = data[col].value_counts()
+    plt.figure(figsize = size)
+    sns.barplot(x = plotdata.index, y=plotdata.values)
+    plt.title(title)
+    if xlabel_angle!=0: 
+        plt.xticks(rotation=xlabel_angle)
+    plt.show()
+plot_categorical(data=application_train, col='TARGET', size=[8 ,4], xlabel_angle=0, title='train set: label')
+
+#############################################################################################################
 #类别型变量与Target关系图，可画出每个子类别
 def plot_re(df,t1='',t2=''):
     f,ax=plt.subplots(1,2,figsize=(10,6))
