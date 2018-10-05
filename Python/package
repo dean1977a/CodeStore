@@ -19,6 +19,7 @@ steppy                                    #pipeline
 Speedml/speedml                           #快速EDA工具
 instacart/lore                            #pipeline工具集合，开发进度还不错
 AxeldeRomblay/MLBox                       #自动机器学习工具库
+salesforce/TransmogrifAI                  #AutoML libary on Spark
                  
 
 plotly/dash                               #a Python framework for building analytical web applications.
