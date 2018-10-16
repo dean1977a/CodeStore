@@ -41,4 +41,33 @@ for feature in test.columns:
         missingFeatures = True
         inTestNotTrain.append(feature)
 if len(inTestNotTrain)>0:
-    print ', '. join(inTestNotTrain), ' features are present in test set but not in training se
+    print ', '. join(inTestNotTrain), ' features are present in test set but not in training set'
+
+###############################################################################################################
+检查并输出类别变量里面的唯一值
+# lets check for factors in the categorical variables
+for feature in categorical_train:
+    print feature, 'has ', len(train[feature].unique()), 'values. Unique values are :: ', train[feature].unique()
+
+for feature in categorical_test:
+    print feature, 'has ', len(test[feature].unique()), 'values. Unique values are :: ', test[feature].unique()
+
+# lets take a look whether the unique values/factors are not present in each of the dataset
+# for example cat1 in both the datasets has values only A & B. Sometimes
+# it may happen that some new value is present in the test set which maybe ruin your model
+featuresDone = []
+for feature in categorical_train:
+    if feature in categorical_test:        
+        if set(train[feature].unique()) - set(test[feature].unique()) != set([]):
+            print 'Train set has ', len(train[feature].unique()), 'values. Unique values are :: ', train[feature].unique(), '\n'
+            print 'test set has ', len(test[feature].unique()), 'values. Unique values are :: ', test[feature].unique(), '\n'
+            print 'Missing vaues are : ', set(train[feature].unique()) - set(test[feature].unique())
+        featuresDone.append(feature)
+
+for feature in categorical_test:
+    if (feature in categorical_train) and (feature not in featuresDone):        
+        if set(train[feature].unique()) - set(test[feature].unique()) != set([]):
+            print 'Train set has ', len(train[feature].unique()), 'values. Unique values are :: ', train[feature].unique(), '\n'
+            print 'test set has ', len(test[feature].unique()), 'values. Unique values are :: ', test[feature].unique(), '\n'
+            print 'Missing vaues are : ', set(train[feature].unique()) - set(test[feature].unique())
+        featuresDone.append(feature)
