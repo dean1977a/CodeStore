@@ -20,3 +20,25 @@ def feature_summary(df_fa):
         df.at[col,'Sample_values']=list(df_fa[col].unique())
            
     return(df.fillna('-'))
+
+##################################################################################################################
+检查train与test是否存在不同的feature columns
+# at this point, it is wise to check whether there are any features that
+# are there is one of the dataset but not in other
+missingFeatures = False
+inTrainNotTest = []
+for feature in train.columns:
+    if feature not in test.columns:
+        missingFeatures = True
+        inTrainNotTest.append(feature)
+
+if len(inTrainNotTest)>0:
+    print ', '. join(inTrainNotTest), ' features are present in training set but not in test set'
+
+inTestNotTrain = []
+for feature in test.columns:
+    if feature not in train.columns:
+        missingFeatures = True
+        inTestNotTrain.append(feature)
+if len(inTestNotTrain)>0:
+    print ', '. join(inTestNotTrain), ' features are present in test set but not in training se
