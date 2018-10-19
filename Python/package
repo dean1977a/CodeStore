@@ -26,6 +26,10 @@ plotly/dash                               #a Python framework for building analy
 altair-viz/altair                         #声明式绘图库，有大量图标样例
 ContextLab / hypertools                   #高纬度数据可视化工具
 slundberg/shap                            #解释任何机器学习模型的输出
+JanusGraph/janusgraph                     #大规模图实时计算和分析        
+Networkx                                  #分析、绘制复杂网路
+Gephi                                     #基于JVM的复杂网络分析软件
+graphx                                    #Spark上的图计算
 
 IndicoDataSolutions/finetune                #Scikit-learn style model finetuning for NLP
 MarkPKCollier/NeuralTuringMachine         #神经图灵机代码复现，记忆增强神经网络MANN，类比LSTM
