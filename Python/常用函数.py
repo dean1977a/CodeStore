@@ -22,6 +22,19 @@ number_columns = data_all.columns[data_all.dtypes != 'object']
 
 # 8. 计算两个特征平均
 sa_price = train_df.groupby('sub_area')[['work_share', 'price_doc']].mean()
+# 8.1 手工统计信息函数
+def stats(x):
+    return pd.Series([x.count(),x.min(),x.idxmin(),
+    x.quantile(.25),x.median(),
+    x.quantile(.75),x.mean(),
+    x.max(),x.idxmax(),
+    x.mad(),x.var(),
+    x.std(),x.skew(),x.kurt()],
+    index = ['Count','Min','Whicn_Min',
+    'Q1','Median','Q3','Mean',
+    'Max','Which_Max','Mad',
+    'Var','Std','Skew','Kurt'])
+df.apply(stats)
 
 # 数据可视化
 
