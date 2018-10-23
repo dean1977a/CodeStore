@@ -62,6 +62,71 @@ def processCabin(df):
     df['CabinNumber_scaled'] = sclar.fit_transform(df['CabinNumber'])
     return df
 
+# 10. 用随机森林处理年龄缺失示例
+def setMissingData(df,features=[],missFeature='Age'):
+    feature_df = df[features]
+    X = feature_df[df[missFeature].notnull()].as_matrix()[:,1::]
+    y = feature_df[df[missFeature].notnull()].as_matrix()[:,0]
+    rtr = RandomForestRegressor(n_estimators=2000,n_jobs=-1)#无限制处理机
+    rtr.fit(X,y)
+    predicitedAges = rtr.predict(feature_df[df[missFeature].isnull()].as_matrix()[:,1:])
+    df.loc[(df[missFeature].isnull()),missFeature] = predicitedAges
+    return df
+
+# def setMissingAges(df):
+#
+#     age_df = df[['Age', 'Embarked', 'Fare', 'Parch', 'SibSp', 'Title_id', 'Pclass', 'Names', 'CabinLetter']]
+#     X = age_df.loc[(df.Age.notnull())].values[:, 1::]
+#     y = age_df.loc[(df.Age.notnull())].values[:, 0]
+#
+#     rtr = RandomForestRegressor(n_estimators=2000, n_jobs=-1)
+#     rtr.fit(X, y)
+#
+#     predictedAges = rtr.predict(age_df.loc[(df.Age.isnull())].values[:, 1::])
+#     df.loc[(df.Age.isnull()), 'Age'] = predictedAges
+#     return  df
+def processAge(df):
+    #先填缺省值
+    #预测的方法RandomForest
+    df = setMissingData(df, features=['Age','Embarked','Fare', 'Parch', 'SibSp', 'Title_id','Pclass','Names','CabinLetter'], missFeature='Age')
+    #df = setMissingAges(df)
+    #此处用中位数以及均值填充但是需要先分层再求均值。
+    # mean_master = np.average(df['Age'][df.Title=='Master'].dropna())
+    # mean_mr = np.average(df['Age'][df.Title=='Mr'].dropna())
+    # mean_miss = np.average(df['Age'][df.Title=='Miss'].dropna())
+    # mean_mrs = np.average(df['Age'][df.Title=='Mrs'].dropna())
+    # df.loc[(df.Age.isnull())&(df.Title=='Master'),'Age'] = mean_master
+    # df.loc[(df.Age.isnull()) & (df.Title == 'Mr'), 'Age'] = mean_mr
+    # df.loc[(df.Age.isnull())&(df.Title=='Miss'),'Age'] = mean_miss
+    # df.loc[(df.Age.isnull()) & (df.Title == 'Mrs'), 'Age'] = mean_mrs
+    scaler = preprocessing.StandardScaler()
+    df['Age_scaled'] = scaler.fit_transform(df['Age'])
+    #特别提到老人小孩。那么显然要离散化年龄
+    # bin into quartiles and create binary features
+    #按照频率接近的类别编号在一起
+    df['Age_bin'] = pd.qcut(df['Age'],4)
+    #而若只跟几个年龄段有关跟其他无关那么虚拟化要
+    df = pd.concat([df, pd.get_dummies(df['Age_bin']).rename(columns=lambda x: 'Age_' + str(x))], axis=1)
+
+    df['Age_bin_id'] = pd.factorize(df['Age_bin'])[0]+1
+    #Age_bin_id也要标准化为了后续组合以及PCA方便
+    scaler = preprocessing.StandardScaler()
+    df['Age_bin_id_scaled'] = scaler.fit_transform(df['Age_bin_id'])
+    df['Child'] = (df['Age']<13).astype(int)
+
+    #变化不大
+    # from sklearn import  preprocessing
+    # scaler = preprocessing.StandardScaler()
+    # df['Age_bin_id_scaled'] = scaler.fit_transform(df['Age_bin_id'])
+    return  df
+
+--------------------- 
+作者：hhy518518 
+来源：CSDN 
+原文：https://blog.csdn.net/hhy518518/article/details/54847688 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
+
 
 # 数据可视化
 
