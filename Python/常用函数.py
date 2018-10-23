@@ -62,7 +62,36 @@ def processCabin(df):
     df['CabinNumber_scaled'] = sclar.fit_transform(df['CabinNumber'])
     return df
 
-# 10. 用随机森林处理年龄缺失示例
+
+# 10. 替换规则
+#匹配字符串后进行替换
+def replace_titles(x):
+    title = x['Title']
+    if title in ['Mr', 'Don', 'Major', 'Capt', 'Sir', 'Rev', 'Col']:
+        return 'Mr'
+    elif title in ['Jonkheer']:
+        return 'Master'
+    elif title in ['Mme']:
+        return 'Mrs'
+    elif title in ['Mlle', 'Ms']:
+        return 'Miss'
+    elif title == 'Dr':
+        if x['Sex'] == 'male':
+            return 'Mr'
+        else:
+            return 'Mrs'
+    elif title == '':
+        if x['Sex'] == 'male':
+            return 'Master'
+        else:
+            return 'Miss'
+    else:
+        return title
+df['Title'] = df.apply(replace_titles,axis=1)
+
+
+
+# 11. 用随机森林处理年龄缺失示例
 def setMissingData(df,features=[],missFeature='Age'):
     feature_df = df[features]
     X = feature_df[df[missFeature].notnull()].as_matrix()[:,1::]
