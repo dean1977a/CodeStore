@@ -149,6 +149,9 @@ def processAge(df):
     # df['Age_bin_id_scaled'] = scaler.fit_transform(df['Age_bin_id'])
     return  df
 
+# 12. 字符串分割
+first = dat_edge_1_weight['first'].str.split(':',expand=True,)
+
 
 # 数据可视化
 
