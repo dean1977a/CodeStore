@@ -120,13 +120,6 @@ def processAge(df):
     # df['Age_bin_id_scaled'] = scaler.fit_transform(df['Age_bin_id'])
     return  df
 
---------------------- 
-作者：hhy518518 
-来源：CSDN 
-原文：https://blog.csdn.net/hhy518518/article/details/54847688 
-版权声明：本文为博主原创文章，转载请附上博文链接！
-
-
 
 # 数据可视化
 
