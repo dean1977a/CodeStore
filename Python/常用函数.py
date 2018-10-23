@@ -36,6 +36,33 @@ def stats(x):
     'Var','Std','Skew','Kurt'])
 df.apply(stats)
 
+#9 手工匹配字符串并map或者apply示例
+def getCabinLetter(cabin):
+    match = re.compile("([a-zA-Z]+)").search(cabin)
+    if match:
+        return  match.group()
+    else:
+        return 'U'
+
+def getCabinNumber(cabin):
+    match = re.compile("([0-9]+)").search(cabin)
+    if match:
+        return match.group()
+    else:
+        return 0
+
+#最后有用的属性就只有CabinLetter 和CabinNumber_scaled
+def processCabin(df):
+    df['Cabin'][df.Cabin.isnull()] = 'U0'
+    df['CabinLetter'] = df['Cabin'].map(lambda x:getCabinLetter(x))
+    df['CabinLetter'] = pd.factorize(df['CabinLetter'])[0]
+    df['CabinNumber'] = df['Cabin'].map(lambda x:getCabinNumber(x)).astype(int) + 1 #0太多
+    #std比较大所以我们要标准化
+    sclar = preprocessing.StandardScaler()
+    df['CabinNumber_scaled'] = sclar.fit_transform(df['CabinNumber'])
+    return df
+
+
 # 数据可视化
 
 # 1. seaborn 画图技巧 
