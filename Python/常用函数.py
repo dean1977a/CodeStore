@@ -89,9 +89,21 @@ def replace_titles(x):
         return title
 df['Title'] = df.apply(replace_titles,axis=1)
 
+# 11.1 正则表达式
+#提取字符串前4位
+extr = df['Date of Publication'].str.extract(r'^(\d{4})', expand=False)
 
+# 11.2 字符串分割
+first = dat_edge_1_weight['first'].str.split(':',expand=True,)
 
-# 11. 用随机森林处理年龄缺失示例
+# 11.3 类型转换
+#总结一下astype()函数有效的情形：
+#数据列中的每一个单位都能简单的解释为数字(2, 2.12等）
+#数据列中的每一个单位都是数值类型且向字符串object类型转换
+#如果数据中含有缺失值、特殊字符astype()函数可能失效。
+df['Date of Publication'] = pd.to_numeric(extr)
+
+# 12. 用随机森林处理年龄缺失示例
 def setMissingData(df,features=[],missFeature='Age'):
     feature_df = df[features]
     X = feature_df[df[missFeature].notnull()].as_matrix()[:,1::]
@@ -149,8 +161,7 @@ def processAge(df):
     # df['Age_bin_id_scaled'] = scaler.fit_transform(df['Age_bin_id'])
     return  df
 
-# 12. 字符串分割
-first = dat_edge_1_weight['first'].str.split(':',expand=True,)
+
 
 
 # 数据可视化
