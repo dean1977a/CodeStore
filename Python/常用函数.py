@@ -162,6 +162,7 @@ def processAge(df):
     return  df
 
 # 13 文本清洗，剔除空格，匹配接近的单词
+# 包依赖： fuzzywuzzy 
 # function to replace rows in the provided column of the provided dataframe
 # that match the provided string above the provided ratio with the provided string
 def replace_matches_in_column(df, column, string_to_match, min_ratio = 90):
