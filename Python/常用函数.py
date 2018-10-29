@@ -161,6 +161,30 @@ def processAge(df):
     # df['Age_bin_id_scaled'] = scaler.fit_transform(df['Age_bin_id'])
     return  df
 
+# 13 文本清洗，剔除空格，匹配接近的单词
+# function to replace rows in the provided column of the provided dataframe
+# that match the provided string above the provided ratio with the provided string
+def replace_matches_in_column(df, column, string_to_match, min_ratio = 90):
+    # get a list of unique strings
+    strings = df[column].unique()
+    
+    # get the top 10 closest matches to our input string
+    matches = fuzzywuzzy.process.extract(string_to_match, strings, 
+                                         limit=10, scorer=fuzzywuzzy.fuzz.token_sort_ratio)
+
+    # only get matches with a ratio > 90
+    close_matches = [matches[0] for matches in matches if matches[1] >= min_ratio]
+
+    # get the rows of all the close matches in our dataframe
+    rows_with_matches = df[column].isin(close_matches)
+
+    # replace all rows with close matches with the input matches 
+    df.loc[rows_with_matches, column] = string_to_match
+    
+    # let us know the function's done
+    print("All done!")
+#应用示例
+replace_matches_in_column(df=suicide_attacks, column='City', string_to_match="d.i khan")
 
 
 
@@ -340,11 +364,6 @@ def plot_learning_curve(estimator,title, X, y,ylim=(0.8, 1.01), cv=None,
     plt.title(title)
     plt.show()
 
---------------------- 
-作者：hhy518518 
-来源：CSDN 
-原文：https://blog.csdn.net/hhy518518/article/details/54847688 
-版权声明：本文为博主原创文章，转载请附上博文链接！
 
 # 创建模型
 # 1. import xgboost as xgb
