@@ -20,6 +20,10 @@ data_all = pd.merge(data_all, data_macro, on='timestamp', how='left')
 object_columns =  data_all.columns[data_all.dtypes == 'object']
 number_columns = data_all.columns[data_all.dtypes != 'object']
 
+
+# 7.1 查看object类的列各列的类别数
+df.select_dtypes(['object']).apply(pd.Series.nunique, axis = 0)
+
 # 8. 计算两个特征平均
 sa_price = train_df.groupby('sub_area')[['work_share', 'price_doc']].mean()
 # 8.1 手工统计信息函数
