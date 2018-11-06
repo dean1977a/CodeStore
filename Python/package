@@ -11,6 +11,7 @@ h2oai/h2o-3                                 #一个用Java编写的机器学习�
 hyperopt                                    #贝叶斯自动参数调优
 BayesianOptimization                        #贝叶斯自动参数调优
 ray-project/ray                             #超参数优化库，主要适用于深度学习和强化学习模型
+gplearn                                     #遗传学特征生产工具
 scikit-learn-contrib/boruta_py              #Brouta特征降维策略，保留对模型有显著贡献的所有特征 
 
 
