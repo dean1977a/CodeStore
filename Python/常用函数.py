@@ -2,6 +2,16 @@
 # 1. 读取数据：
 data_macro = pd.read_csv("macro.csv", parse_dates=['timestamp'], usecols=['timestamp'] + macro_cols)
 
+# 1.1多条件筛选
+f = (footballers
+         .loc[footballers['Position'].isin(['ST', 'GK'])]
+         .loc[:, ['Value', 'Overall', 'Aggression', 'Position']]
+    )
+f = f[f["Overall"] >= 80]
+f = f[f["Overall"] < 85]
+f['Aggression'] = f['Aggression'].astype(float)
+
+
 # 2. 显示为object的属性：
 data_train.dtypes[data_train.dtypes=='object']
 
