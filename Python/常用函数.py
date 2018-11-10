@@ -103,6 +103,16 @@ def replace_titles(x):
         return title
 df['Title'] = df.apply(replace_titles,axis=1)
 
+# 10.1 根据列中数字大小或字符内容，新建对应的标签列
+def majority(x):
+    if x > 17:
+        return True
+    else:
+        return False
+#示例
+stud_alcoh['legal_drinker'] = stud_alcoh['age'].apply(majority)
+
+
 # 11.1 正则表达式
 #提取字符串前4位
 extr = df['Date of Publication'].str.extract(r'^(\d{4})', expand=False)
