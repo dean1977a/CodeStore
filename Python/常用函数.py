@@ -11,6 +11,18 @@ f = f[f["Overall"] >= 80]
 f = f[f["Overall"] < 85]
 f['Aggression'] = f['Aggression'].astype(float)
 
+# 1.2剔除异常值
+def outlier_processing(df,col):
+    s=df[col]
+    oneQuoter=s.quantile(0.25)
+    threeQuote=s.quantile(0.75)
+    irq=threeQuote-oneQuoter
+    min=oneQuoter-1.5*irq
+    max=threeQuote+1.5*irq
+    df=df[df[col]<=max]
+    df=df[df[col]>=min]
+    return df
+
 
 # 2. 显示为object的属性：
 data_train.dtypes[data_train.dtypes=='object']
