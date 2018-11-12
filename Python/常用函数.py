@@ -30,6 +30,41 @@ data_train.dtypes[data_train.dtypes=='object']
 # 3. 改变数据类型
 data_train['material'] = data_train['material'].astype('object')
 
+# 3.1 类型转换
+#总结一下astype()函数有效的情形：
+#数据列中的每一个单位都能简单的解释为数字(2, 2.12等）
+#数据列中的每一个单位都是数值类型且向字符串object类型转换
+#如果数据中含有缺失值、特殊字符astype()函数可能失效。
+df['Date of Publication'] = pd.to_numeric(extr)
+
+# 3.2
+def convert_currency(value):
+ """
+ 转换字符串数字为float类型
+ - 移除 ￥ ,
+ - 转化为float类型
+ """
+ new_value = value.replace(',', '').replace('￥', '')
+ return np.float(new_value)
+#示例
+data['2016'].apply(convert_currency)
+#等同于
+data['2016'].apply(lambda x: x.replace('￥', '').replace(',', '')).astype('float')
+
+# 3.3
+def convert_percent(value):
+ """
+ 转换字符串百分数为float类型小数
+ - 移除 %
+ - 除以100转换为小数
+ """
+ new_value = value.replace('%', '')
+ return float(new_value) / 100
+#示例
+data['增长率'].apply(convert_percent)
+#等同于
+data['增长率'].apply(lambda x: x.replace('%', '')).astype('float') / 100
+
 # 4. 概览数据
 data_train.describe(include=['object'])
 # 5. 合并两个表（上下）
@@ -124,6 +159,8 @@ def majority(x):
 #示例
 stud_alcoh['legal_drinker'] = stud_alcoh['age'].apply(majority)
 
+#为了转换状态列，可以使用Numpy中的where函数，把值为Y的映射成True,其他值全部映射成False。
+data['状态'] = np.where(data['状态'] == 'Y', True, False)
 
 # 11.1 正则表达式
 #提取字符串前4位
@@ -131,41 +168,6 @@ extr = df['Date of Publication'].str.extract(r'^(\d{4})', expand=False)
 
 # 11.2 字符串分割
 first = dat_edge_1_weight['first'].str.split(':',expand=True,)
-
-# 11.3 类型转换
-#总结一下astype()函数有效的情形：
-#数据列中的每一个单位都能简单的解释为数字(2, 2.12等）
-#数据列中的每一个单位都是数值类型且向字符串object类型转换
-#如果数据中含有缺失值、特殊字符astype()函数可能失效。
-df['Date of Publication'] = pd.to_numeric(extr)
-
-# 11.4
-def convert_currency(value):
- """
- 转换字符串数字为float类型
- - 移除 ￥ ,
- - 转化为float类型
- """
- new_value = value.replace(',', '').replace('￥', '')
- return np.float(new_value)
-#示例
-data['2016'].apply(convert_currency)
-#等同于
-data['2016'].apply(lambda x: x.replace('￥', '').replace(',', '')).astype('float')
-
-#11.5
-def convert_percent(value):
- """
- 转换字符串百分数为float类型小数
- - 移除 %
- - 除以100转换为小数
- """
- new_value = value.replace('%', '')
- return float(new_value) / 100
-#示例
-data['增长率'].apply(convert_percent)
-#等同于
-data['增长率'].apply(lambda x: x.replace('%', '')).astype('float') / 100
 
 # 12.1 文本处理 
 # convert to lower case  转小写
