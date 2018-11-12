@@ -139,7 +139,33 @@ first = dat_edge_1_weight['first'].str.split(':',expand=True,)
 #如果数据中含有缺失值、特殊字符astype()函数可能失效。
 df['Date of Publication'] = pd.to_numeric(extr)
 
+# 11.4
+def convert_currency(value):
+ """
+ 转换字符串数字为float类型
+ - 移除 ￥ ,
+ - 转化为float类型
+ """
+ new_value = value.replace(',', '').replace('￥', '')
+ return np.float(new_value)
+#示例
+data['2016'].apply(convert_currency)
+#等同于
+data['2016'].apply(lambda x: x.replace('￥', '').replace(',', '')).astype('float')
 
+#11.5
+def convert_percent(value):
+ """
+ 转换字符串百分数为float类型小数
+ - 移除 %
+ - 除以100转换为小数
+ """
+ new_value = value.replace('%', '')
+ return float(new_value) / 100
+#示例
+data['增长率'].apply(convert_percent)
+#等同于
+data['增长率'].apply(lambda x: x.replace('%', '')).astype('float') / 100
 
 # 12.1 文本处理 
 # convert to lower case  转小写
