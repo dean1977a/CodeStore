@@ -23,7 +23,6 @@ def outlier_processing(df,col):
     df=df[df[col]>=min]
     return df
 
-
 # 2. 显示为object的属性：
 data_train.dtypes[data_train.dtypes=='object']
 
@@ -64,6 +63,18 @@ def convert_percent(value):
 data['增长率'].apply(convert_percent)
 #等同于
 data['增长率'].apply(lambda x: x.replace('%', '')).astype('float') / 100
+
+# 3.4直接在读取文件时进行转换
+data2 = pd.read_csv("data.csv",
+   converters={
+    '客户编号': str,
+    '2016': convert_currency,
+    '2017': convert_currency,
+    '增长率': convert_percent,
+    '所属组': lambda x: pd.to_numeric(x, errors='coerce'),
+    '状态': lambda x: np.where(x == "Y", True, False)
+    },
+   encoding='gbk')
 
 # 4. 概览数据
 data_train.describe(include=['object'])
