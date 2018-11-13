@@ -308,6 +308,25 @@ def processAge(df):
     # df['Age_bin_id_scaled'] = scaler.fit_transform(df['Age_bin_id'])
     return  df
 
+#利用数据透视表生成区间特征
+def get_bureau_balance():   
+    data = pd.read_csv(path +'bureau_balance.csv')
+    data["STATUS"], uniques = pd.factorize(data["STATUS"]) 
+    data["MONTHS_BALANCE"] = abs(data["MONTHS_BALANCE"])
+    cut_points = [0,2,4,12,24,36]                                 #选择区间切分点
+    cut_points = cut_points + [data["MONTHS_BALANCE"].max()]
+    labels = ["2MON","4MON","12MON","24MON","36MON","ABOVE"]      #这里可以改成1,3,6,12,18,24,36,above
+    #构建区间标签
+    data["MON_INTERVAL"] = pd.cut(data["MONTHS_BALANCE"], cut_points,labels=labels,include_lowest=True)     
+    feature = pd.pivot_table(data,index=["SK_ID_BUREAU"],columns=["MON_INTERVAL"],values=["STATUS"],aggfunc=[np.max,np.mean,np.std]).astype('float32')
+    #将3级标签转换为1级标签
+    feature.columns = ["_".join(f_).upper() for f_ in feature.columns]
+    
+    bb_agg = data.groupby('SK_ID_BUREAU').agg({'MONTHS_BALANCE': ['min', 'max', 'size']}).astype('float32')
+    bb_agg.columns = pd.Index([e[0] + "_" + e[1].upper() for e in bb_agg.columns.tolist()])
+    feature = pd.merge(feature,bb_agg,how="left",left_index=True,right_index=True)
+    return feature, feature.columns.tolist()
+
 
 
 
