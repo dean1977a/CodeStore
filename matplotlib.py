@@ -24,14 +24,14 @@ def kde_target(var_name, df):
     corr = df['TARGET'].corr(df[var_name])
     
     # Calculate medians for repaid vs not repaid
-    avg_repaid = df.ix[df['TARGET'] == 0, var_name].median()
-    avg_not_repaid = df.ix[df['TARGET'] == 1, var_name].median()
+    avg_repaid = df.loc[df['TARGET'] == 0, var_name].median()
+    avg_not_repaid = df.loc[df['TARGET'] == 1, var_name].median()
     
     plt.figure(figsize = (12, 6))
     
     # Plot the distribution for target == 0 and target == 1
-    sns.kdeplot(df.ix[df['TARGET'] == 0, var_name], label = 'TARGET == 0')
-    sns.kdeplot(df.ix[df['TARGET'] == 1, var_name], label = 'TARGET == 1')
+    sns.kdeplot(df.loc[df['TARGET'] == 0, var_name], label = 'TARGET == 0')
+    sns.kdeplot(df.loc[df['TARGET'] == 1, var_name], label = 'TARGET == 1')
     
     # label the plot
     plt.xlabel(var_name); plt.ylabel('Density'); plt.title('%s Distribution' % var_name)
