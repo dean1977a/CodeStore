@@ -2,7 +2,7 @@
 # 1. 读取数据：
 data_macro = pd.read_csv("macro.csv", parse_dates=['timestamp'], usecols=['timestamp'] + macro_cols)
 
-# 1.1多条件筛选
+# 1.1多条件筛选方法一
 f = (footballers
          .loc[footballers['Position'].isin(['ST', 'GK'])]
          .loc[:, ['Value', 'Overall', 'Aggression', 'Position']]
@@ -11,7 +11,10 @@ f = f[f["Overall"] >= 80]
 f = f[f["Overall"] < 85]
 f['Aggression'] = f['Aggression'].astype(float)
 
-# 1.2剔除异常值
+# 1.2多条件筛选方法二
+data[(data['CREDIT_TYPE']=='Consumer credit')&(data['AMT_ANNUITY']>0)]['AMT_ANNUITY'].sample(100)
+
+# 1.3剔除异常值
 def outlier_processing(df,col):
     s=df[col]
     oneQuoter=s.quantile(0.25)
