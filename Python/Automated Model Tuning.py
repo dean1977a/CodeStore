@@ -247,7 +247,3 @@ best = fmin(f, space, algo=tpe.suggest, max_evals=1500, trials=trials)
 print 'best:'
 print best
 
-作者：ktulu7
-链接：https://www.jianshu.com/p/35eed1567463
-來源：简书
-简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
