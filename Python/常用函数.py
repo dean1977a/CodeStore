@@ -76,6 +76,22 @@ data2 = pd.read_csv("data.csv",
     },
    encoding='gbk')
 
+# 3.5将数值类型特征和类别特征输出出来
+def type_features(data):
+    categorical_features = data.select_dtypes(include = ["object"]).columns
+    numerical_features = data.select_dtypes(exclude = ["object"]).columns
+    print( "categorical_features :",categorical_features)
+    print('-----'*40)
+    print("numerical_features:",numerical_features)
+
+# 3.6将object改变为category
+for c in X.columns:
+    col_type = X[c].dtype
+    if col_type == 'object' or col_type.name == 'category':
+        X[c] = X[c].astype('category')
+
+
+
 # 4. 概览数据
 data_train.describe(include=['object'])
 # 5. 合并两个表（上下）
