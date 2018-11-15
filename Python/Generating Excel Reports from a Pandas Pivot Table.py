@@ -1,6 +1,6 @@
 """
 Sample report generation script from pbpython.com
-
+http://pbpython.com/pandas-pivot-report.html
 This program takes an input Excel file, reads it and turns it into a
 pivot table.
 
