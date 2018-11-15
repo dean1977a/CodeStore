@@ -425,6 +425,33 @@ ax.set(title='Log10 of median price by state of home', xlabel='state', ylabel='l
 # 8. barplot 
 ax = sns.barplot(x="count", y="sub_area", data=sa_vc, orient="h")
 
+# 9. 画出每个特征的散点图和柱状图
+def plot_dist(df, feature, pic_name='dist_plot.png'):
+    fcols = 2
+    frows = len(feature) + 1
+    print(fcols, frows)
+    plt.figure(figsize=(5*fcols, 4*frows))
+
+    i = 0
+    for col in feature:
+        
+        i += 1
+        ax = plt.subplot(frows, fcols, i)
+
+        plt.scatter(df[col], df['TARGET'])
+
+        plt.xlabel(col)
+        plt.ylabel('TARGET')
+
+        i += 1
+        ax = plt.subplot(frows, fcols, i)
+        sns.distplot(df[col].dropna(), fit=stats.norm)
+        plt.xlabel(col)
+
+    plt.tight_layout()
+#示例    
+plot_dist(data, data.columns)
+
 # 特征工程
 # 1. 移除异常点
 ulimit = np.percentile(data_train.price_doc.values, 99)
