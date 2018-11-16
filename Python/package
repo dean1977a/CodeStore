@@ -23,8 +23,8 @@ instacart/lore                            #pipeline工具集合，开发进度�
 spotify/luigi                             #Luigi is a Python module that helps you build complex pipelines of batch jobs.
                                           #It handles dependency resolution, workflow management, visualization etc. 
                                           #It also comes with Hadoop support built in.
-databricks/spark-deep-learning            #In the spirit of Spark and Spark MLlib, it provides easy-to-use APIs that enable deep learning in very few lines of code.
-                                          #It uses Spark's powerful distributed engine to scale out deep learning on massive datasets.
+databricks/spark-deep-learning            #提供了易于使用的API，可以在极少数代码行中实现深度学习。
+                                          #使用Spark强大的分布式引擎来扩展海量数据集的深度学习。
 AxeldeRomblay/MLBox                       #自动机器学习工具库
 salesforce/TransmogrifAI                  #AutoML libary on Spark
                  
