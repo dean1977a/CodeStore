@@ -20,6 +20,9 @@ steppy                                    #pipeline
 Speedml/speedml                           #快速EDA工具
 abhayspawar/featexp                       #特征探索
 instacart/lore                            #pipeline工具集合，开发进度还不错
+spotify/luigi                             #Luigi is a Python module that helps you build complex pipelines of batch jobs.
+                                          #It handles dependency resolution, workflow management, visualization etc. 
+                                          #It also comes with Hadoop support built in.
 AxeldeRomblay/MLBox                       #自动机器学习工具库
 salesforce/TransmogrifAI                  #AutoML libary on Spark
                  
