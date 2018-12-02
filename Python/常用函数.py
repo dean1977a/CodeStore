@@ -127,6 +127,9 @@ def stats(x):
     'Var','Std','Skew','Kurt'])
 df.apply(stats)
 
+# 8.2 查看类别属性占比
+housing["income_cat"].value_counts() / len(housing)
+
 #9 手工匹配字符串并map或者apply示例
 def getCabinLetter(cabin):
     match = re.compile("([a-zA-Z]+)").search(cabin)
