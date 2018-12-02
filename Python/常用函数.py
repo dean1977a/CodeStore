@@ -194,8 +194,10 @@ stud_alcoh['legal_drinker'] = stud_alcoh['age'].apply(majority)
 
 #为了转换状态列，可以使用Numpy中的where函数，把值为Y的映射成True,其他值全部映射成False,False可不填，这样只有在True的时候才会改变值。
 data['状态'] = np.where(data['状态'] == 'Y', True, False)
-示例：
+示例1：
 df['6期以内拖车'] = np.where((df['1128是否拖车']=='是')&(df['已收期数']<6),1,0)
+示例2：
+housing["income_cat"].where(housing["income_cat"] < 5, 5.0, inplace=True)
 
 # 11.1 正则表达式
 #提取字符串前4位
