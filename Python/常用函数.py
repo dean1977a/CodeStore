@@ -334,7 +334,7 @@ def processAge(df):
     # df['Age_bin_id_scaled'] = scaler.fit_transform(df['Age_bin_id'])
     return  df
 
-#利用数据透视表生成区间特征
+#14 利用数据透视表生成区间特征
 def get_bureau_balance():   
     data = pd.read_csv(path +'bureau_balance.csv')
     data["STATUS"], uniques = pd.factorize(data["STATUS"]) 
@@ -352,6 +352,16 @@ def get_bureau_balance():
     bb_agg.columns = pd.Index([e[0] + "_" + e[1].upper() for e in bb_agg.columns.tolist()])
     feature = pd.merge(feature,bb_agg,how="left",left_index=True,right_index=True)
     return feature, feature.columns.tolist()
+
+# 15 查找只含有一个唯一值的特征
+def find_one_unqiue_values(df):
+# We will takeoff all columns where we have a unique value (constants)
+# It is useful because this columns don't give us none information
+   discovering_consts = [col for col in df_train.columns if df_train[col].nunique() == 1]
+   return discovering_consts
+# printing the total of columns dropped and the name of columns 
+   print("Columns with just one value: ", len(discovering_consts), "columns")
+   print("Name of constant columns: \n", discovering_consts)
 
 
 
