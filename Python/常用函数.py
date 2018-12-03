@@ -362,6 +362,18 @@ def find_one_unqiue_values(df):
 # printing the total of columns dropped and the name of columns 
    print("Columns with just one value: ", len(discovering_consts), "columns")
    print("Name of constant columns: \n", discovering_consts)
+# 15.1 显示每个特征的唯一值
+# seting the function to show 
+def knowningData(df, data_type=object, limit=3): #seting the function with df, 
+    n = df.select_dtypes(include=data_type) #selecting the desired data type
+    for column in n.columns: #initializing the loop
+        print("##############################################")
+        print("Name of column ", column, ': \n', "Uniques: ", df[column].unique()[:limit], "\n",
+              " | ## Total nulls: ", (round(df[column].isnull().sum() / len(df[column]) * 100,2)),
+              " | ## Total unique values: ", df_train.nunique()[column]) #print the data and % of nulls)
+        # print("Percentual of top 3 of: ", column)
+        # print(round(df[column].value_counts()[:3] / df[column].value_counts().sum() * 100,2))
+        print("#############################################")
 
 
 
