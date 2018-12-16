@@ -14,6 +14,16 @@ f['Aggression'] = f['Aggression'].astype(float)
 # 1.2多条件筛选方法二
 data[(data['CREDIT_TYPE']=='Consumer credit')&(data['AMT_ANNUITY']>0)]['AMT_ANNUITY'].sample(100)
 
+# 1.3多条件筛选方法三
+#在导入数据阶段直接进行筛选作业
+# Define a list of models that we want to review 定义感兴趣的数据关键字
+models = ["toyota","nissan","mazda", "honda", "mitsubishi", "subaru", "volkswagen", "volvo"]
+
+# Create a copy of the data with only the top 8 manufacturers 创建子集
+df = df_raw[df_raw.make.isin(models)].copy()
+#等同于
+df = df_raw[df_raw['make'].isin(models)].copy()
+
 # 1.3剔除异常值
 def outlier_processing(df,col):
     s=df[col]
