@@ -208,6 +208,8 @@ data['状态'] = np.where(data['状态'] == 'Y', True, False)
 df['6期以内拖车'] = np.where((df['1128是否拖车']=='是')&(df['已收期数']<6),1,0)
 示例2：
 housing["income_cat"].where(housing["income_cat"] < 5, 5.0, inplace=True)
+示例3：
+df['sex']=np.where(df['name'].isin(['Lucy','Lily']),'girl','boy') #isin的选择方式
 
 # 11.1 正则表达式
 #提取字符串前4位
