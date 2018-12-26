@@ -210,6 +210,8 @@ df['6期以内拖车'] = np.where((df['1128是否拖车']=='是')&(df['已收期
 housing["income_cat"].where(housing["income_cat"] < 5, 5.0, inplace=True)
 示例3：
 df['sex']=np.where(df['name'].isin(['Lucy','Lily']),'girl','boy') #isin的选择方式
+示例4：
+df['冰鉴分区间'] = np.where((df['冰鉴分']==-2),'命中规则二',pd.cut(df['冰鉴分'],bj_score_bins))
 
 # 11.1 正则表达式
 #提取字符串前4位
