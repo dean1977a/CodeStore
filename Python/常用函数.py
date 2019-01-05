@@ -877,3 +877,41 @@ cv_mean = res.iloc[-1, 0]
 cv_std = res.iloc[-1, 1]
 
 print('Ensemble-CV: {0}+{1}'.format(cv_mean, cv_std))
+
+
+#模型评价
+#KS值计算
+#crosstab实现
+def ks_calc_cross(data,score_col,class_col):
+    '''
+    功能: 计算KS值，输出对应分割点和累计分布函数曲线图
+    输入值:
+    data: 二维数组或dataframe，包括模型得分和真实的标签
+    score_col: 一维数组或series，代表模型得分（一般为预测正类的概率）
+    class_col: 一维数组或series，代表真实的标签（{0,1}或{-1,1}）
+    输出值:
+    'ks': KS值，'crossdens': 好坏人累积概率分布以及其差值gap
+    '''
+    ks_dict = {}
+    crossfreq = pd.crosstab(data[score_col[0]],data[class_col[0]])
+    crossdens = crossfreq.cumsum(axis=0) / crossfreq.sum()
+    crossdens['gap'] = abs(crossdens[0] - crossdens[1])
+    ks = crossdens[crossdens['gap'] == crossdens['gap'].max()]
+    return ks,crossdens
+
+
+#roc_curve实现
+from sklearn.metrics import roc_curve,auc
+def ks_calc_auc(data,score_col,class_col):
+    '''
+    功能: 计算KS值，输出对应分割点和累计分布函数曲线图
+    输入值:
+    data: 二维数组或dataframe，包括模型得分和真实的标签
+    score_col: 一维数组或series，代表模型得分（一般为预测正类的概率）
+    class_col: 一维数组或series，代表真实的标签（{0,1}或{-1,1}）
+    输出值:
+    'ks': KS值
+    '''
+    fpr,tpr,threshold = roc_curve((1-data[class_col[0]]).ravel(),data[score_col[0]].ravel())
+    ks = max(tpr-fpr)
+    return ks
