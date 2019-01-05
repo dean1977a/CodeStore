@@ -881,6 +881,7 @@ print('Ensemble-CV: {0}+{1}'.format(cv_mean, cv_std))
 
 #模型评价
 #KS值计算
+#ks_calc_cross可以无视数据中是否有NAN值，ks_calc_auc则不行
 #crosstab实现
 def ks_calc_cross(data,score_col,class_col):
     '''
