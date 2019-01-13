@@ -371,7 +371,7 @@ def get_bureau_balance():
 def find_one_unqiue_values(df):
 # We will takeoff all columns where we have a unique value (constants)
 # It is useful because this columns don't give us none information
-   discovering_consts = [col for col in df_train.columns if df_train[col].nunique() == 1]
+   discovering_consts = [col for col in df.columns if df[col].nunique() == 1]
    return discovering_consts
 # printing the total of columns dropped and the name of columns 
    print("Columns with just one value: ", len(discovering_consts), "columns")
@@ -384,16 +384,28 @@ def knowningData(df, data_type=object, limit=3): #seting the function with df,
         print("##############################################")
         print("Name of column ", column, ': \n', "Uniques: ", df[column].unique()[:limit], "\n",
               " | ## Total nulls: ", (round(df[column].isnull().sum() / len(df[column]) * 100,2)),
-              " | ## Total unique values: ", df_train.nunique()[column]) #print the data and % of nulls)
+              " | ## Total unique values: ", df.nunique()[column]) #print the data and % of nulls)
         # print("Percentual of top 3 of: ", column)
         # print(round(df[column].value_counts()[:3] / df[column].value_counts().sum() * 100,2))
-        print("#############################################")
+print("#############################################")
 
 
 
 
 
 # 数据可视化
+import matplotlib.pyplot as plt
+import seaborn as sns
+from IPython.display import display
+%matplotlib inline
+
+import plotly.offline as py
+import plotly.graph_objs as go
+import plotly.tools as tls
+py.init_notebook_mode(connected=True)
+
+import warnings
+warnings.filterwarnings('ignore')
 
 # 1. seaborn 画图技巧 
 # https://zhuanlan.zhihu.com/p/24464836
@@ -469,6 +481,8 @@ ax.set(title='Log10 of median price by state of home', xlabel='state', ylabel='l
 ax = sns.barplot(x="count", y="sub_area", data=sa_vc, orient="h")
 
 # 9. 画出每个特征的散点图和柱状图
+#示例1
+from scipy import stats
 def plot_dist(df, feature, pic_name='dist_plot.png'):
     fcols = 2
     frows = len(feature) + 1
@@ -492,8 +506,112 @@ def plot_dist(df, feature, pic_name='dist_plot.png'):
         plt.xlabel(col)
 
     plt.tight_layout()
-#示例    
+#运行示例    
 plot_dist(data, data.columns)
+
+示例2
+g = sns.pairplot(df, hue="target", palette="husl")
+
+#10.1 绘制单个特征的分布图
+def plotHist(df,nameOfFeature):
+    cls_train = df[nameOfFeature]
+    data_array = cls_train
+    hist_data = np.histogram(data_array)
+    binsize = .5
+
+    trace1 = go.Histogram(
+        x=data_array,
+        histnorm='count',
+        name='Histogram of Wind Speed',
+        autobinx=False,
+        xbins=dict(
+            start=df[nameOfFeature].min()-1,
+            end=df[nameOfFeature].max()+1,
+            size=binsize
+        )
+    )
+
+    trace_data = [trace1]
+    layout = go.Layout(
+        bargroupgap=0.3,
+         title='The distribution of ' + nameOfFeature,
+        xaxis=dict(
+            title=nameOfFeature,
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=18,
+                color='#7f7f7f'
+            )
+        ),
+        yaxis=dict(
+            title='Number of labels',
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=18,
+                color='#7f7f7f'
+            )
+        )
+    )
+    fig = go.Figure(data=trace_data, layout=layout)
+    py.iplot(fig)
+
+#10.1 绘制两个特征对比分布图
+from scipy.stats import skew
+from scipy.stats import kurtosis
+def plotBarCat(df,feature,target):
+    
+    
+    
+    x0 = df[df[target]==0][feature]
+    x1 = df[df[target]==1][feature]
+
+    trace1 = go.Histogram(
+        x=x0,
+        opacity=0.75
+    )
+    trace2 = go.Histogram(
+        x=x1,
+        opacity=0.75
+    )
+
+    data = [trace1, trace2]
+    layout = go.Layout(barmode='overlay',
+                      title=feature,
+                       yaxis=dict(title='Count'
+        ))
+    fig = go.Figure(data=data, layout=layout)
+
+    py.iplot(fig, filename='overlaid histogram')
+    
+    def DescribeFloatSkewKurt(df,target):
+        """
+            A fundamental task in many statistical analyses is to characterize
+            the location and variability of a data set. A further
+            characterization of the data includes skewness and kurtosis.
+            Skewness is a measure of symmetry, or more precisely, the lack
+            of symmetry. A distribution, or data set, is symmetric if it
+            looks the same to the left and right of the center point.
+            Kurtosis is a measure of whether the data are heavy-tailed
+            or light-tailed relative to a normal distribution. That is,
+            data sets with high kurtosis tend to have heavy tails, or
+            outliers. Data sets with low kurtosis tend to have light
+            tails, or lack of outliers. A uniform distribution would
+            be the extreme case
+        """
+        print('-*-'*25)
+        print("{0} mean : ".format(target), np.mean(df[target]))
+        print("{0} var  : ".format(target), np.var(df[target]))
+        print("{0} skew : ".format(target), skew(df[target]))
+        print("{0} kurt : ".format(target), kurtosis(df[target]))
+        print('-*-'*25)
+    
+    DescribeFloatSkewKurt(df,target)
+#运行示例
+plotBarCat(df,df_name[0],'Outcome')
+
+
+
+
 
 # 特征工程
 # 1. 移除异常点
