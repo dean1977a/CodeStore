@@ -641,12 +641,16 @@ data_all_groupby = data_all.groupby('yearmonth')
 # 5. 连续数据离散化
 data_all['floor_25'] = (data_all['floor']>25.0)*1
 
-# 6. 分组来填补平均值
+# 6.1 分组来填补平均值
 for num in number_columns:
     if(sum(data_all[num].isnull())>0):
         isnull_raw = data_all[num].isnull()
         isnull_yearmonth = data_all.ix[isnull_raw, 'yearmonth'].values
         data_all_groupby[num].transform(lambda x: x.fillna(x.mean()))
+
+# 6.2 利用map进行填充分组的平均值
+temp = data.groupby("CREDIT_TYPE")["AMT_ANNUITY"].mean()
+data["CREDIT_TYPE_AMT_ANNUITY"] = data["CREDIT_TYPE"].map(temp)
 
 # 7. Get_dummies离散化
 dummies = pd.get_dummies(data=data_all[ob], prefix="{}#".format(ob))
