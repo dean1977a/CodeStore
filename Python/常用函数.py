@@ -218,7 +218,11 @@ df['冰鉴分区间'] = np.where((df['冰鉴分']==-2),'命中规则二',pd.cut(
 extr = df['Date of Publication'].str.extract(r'^(\d{4})', expand=False)
 
 # 11.2 字符串分割
+#示例1
 first = dat_edge_1_weight['first'].str.split(':',expand=True,)
+#示例2
+#df['承租人'].str.split('-',expand=True)这里将Series根据“-”分割成3列，然后再与原来的表格merge
+df_final = pd.merge(df,pd.DataFrame(df['承租人'].str.split('-',expand=True)),how='left',left_index=True,right_index=True)
 
 # 12.1 文本处理 
 # convert to lower case  转小写
