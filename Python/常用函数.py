@@ -229,6 +229,9 @@ df_final = pd.merge(df,pd.DataFrame(df['承租人'].str.split('-',expand=True)),
 suicide_attacks['City'] = suicide_attacks['City'].str.lower()
 # remove trailing white spaces   去空格
 suicide_attacks['City'] = suicide_attacks['City'].str.strip()
+# 替换指定字符
+df_final['手机号'] = df_final['手机号'].str.replace('?',' ')
+df_final['手机号'] = df_final['手机号'].str.strip()
 
 # 12.2 文本清洗，剔除空格，匹配接近的单词
 # 包依赖： fuzzywuzzy 
