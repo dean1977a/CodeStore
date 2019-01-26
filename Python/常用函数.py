@@ -396,7 +396,8 @@ def knowningData(df, data_type=object, limit=3): #seting the function with df,
         # print(round(df[column].value_counts()[:3] / df[column].value_counts().sum() * 100,2))
 print("#############################################")
 
-
+#16 将groupby之后的两层列名合并成一层
+temp.columns = ["_".join(x) for x in temp.columns.ravel()]
 
 
 
