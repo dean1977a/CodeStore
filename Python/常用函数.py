@@ -281,19 +281,27 @@ def getInterval_new(arrLike,before,after):  #用来计算日期间隔天数的�
     days = dataInterval(after.strip(),before.strip())  #注意去掉两端空白
     return days
 
-
 if __name__ == '__main__':    
     fileName = "NS_new.xls";
     df = pd.read_excel(fileName) 
     df['TimeInterval'] = df.apply(getInterval , axis = 1)
-    df['TimeInterval'] = df.apply(getInterval_new , 
-      axis = 1, args = ('ReceivedTime','PublishedTime'))    #调用方式一
+    df['TimeInterval'] = df.apply(getInterval_new , axis = 1, args = ('ReceivedTime','PublishedTime'))    #调用方式一
     #下面的调用方式等价于上面的调用方式
-    df['TimeInterval'] = df.apply(getInterval_new , 
-      axis = 1, **{'before':'ReceivedTime','after':'PublishedTime'})  #调用方式二
+    df['TimeInterval'] = df.apply(getInterval_new , axis = 1, **{'before':'ReceivedTime','after':'PublishedTime'})  #调用方式二
     #下面的调用方式等价于上面的调用方式
-    df['TimeInterval'] = df.apply(getInterval_new , 
-      axis = 1, before='ReceivedTime',after='PublishedTime')  #调用方式三
+    df['TimeInterval'] = df.apply(getInterval_new , axis = 1, before='ReceivedTime',after='PublishedTime')  #调用方式三
+         
+#12.1  文本与时间格式转换
+#示例1：string变成datetime格式 
+dates = pd.to_datetime(pd.Series([‘20010101’, ‘20010331’]), format = ‘%Y%m%d’) 
+#示例2：datetime变回string格式 
+dates.apply(lambda x: x.strftime(‘%Y-%m-%d’))
+--------------------- 
+作者：richard_18 
+来源：CSDN 
+原文：https://blog.csdn.net/richard_18/article/details/80720572 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
 
 
 
