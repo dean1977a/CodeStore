@@ -296,13 +296,6 @@ if __name__ == '__main__':
 dates = pd.to_datetime(pd.Series([‘20010101’, ‘20010331’]), format = ‘%Y%m%d’) 
 #示例2：datetime变回string格式 
 dates.apply(lambda x: x.strftime(‘%Y-%m-%d’))
---------------------- 
-作者：richard_18 
-来源：CSDN 
-原文：https://blog.csdn.net/richard_18/article/details/80720572 
-版权声明：本文为博主原创文章，转载请附上博文链接！
-
-
 
 
 # 13. 用随机森林处理年龄缺失示例
