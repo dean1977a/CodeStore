@@ -29,6 +29,7 @@ databricks/spark-deep-learning            #提供了易于使用的API，可以�
                                           #使用Spark强大的分布式引擎来扩展海量数据集的深度学习。
 AxeldeRomblay/MLBox                       #自动机器学习工具库
 salesforce/TransmogrifAI                  #AutoML libary on Spark
+Azure/mmlspark                            #微软Spark机器学习拓展包 Lightgbm CNTK
                  
 
 plotly/dash                               #a Python framework for building analytical web applications.
