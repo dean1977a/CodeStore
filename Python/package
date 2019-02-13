@@ -42,7 +42,7 @@ slundberg/shap                            #解释任何机器学习模型的输�
 JanusGraph/janusgraph                     #大规模图实时计算和分析        
 Networkx                                  #基于Python的分析、绘制复杂网路
 Gephi                                     #基于JVM的复杂网络分析软件
-graphx                                    #Spark上的图计算
+
 
 IndicoDataSolutions/finetune                #Scikit-learn style model finetuning for NLP
 MarkPKCollier/NeuralTuringMachine         #神经图灵机代码复现，记忆增强神经网络MANN，类比LSTM
