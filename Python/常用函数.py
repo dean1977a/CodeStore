@@ -204,14 +204,17 @@ stud_alcoh['legal_drinker'] = stud_alcoh['age'].apply(majority)
 
 #为了转换状态列，可以使用Numpy中的where函数，把值为Y的映射成True,其他值全部映射成False,False可不填，这样只有在True的时候才会改变值。
 data['状态'] = np.where(data['状态'] == 'Y', True, False)
-示例1：
+#示例1：
 df['6期以内拖车'] = np.where((df['1128是否拖车']=='是')&(df['已收期数']<6),1,0)
-示例2：
+#示例2：
 housing["income_cat"].where(housing["income_cat"] < 5, 5.0, inplace=True)
-示例3：
+#示例3：
 df['sex']=np.where(df['name'].isin(['Lucy','Lily']),'girl','boy') #isin的选择方式
-示例4：
+#示例4：
 df['冰鉴分区间'] = np.where((df['冰鉴分']==-2),'命中规则二',pd.cut(df['冰鉴分'],bj_score_bins))
+#示例5：
+df1["time"] = np.where(df1["通话时长"].str.contains("分"),df1["通话时长"],["0分"]+df1["通话时长"])
+
 
 # 11.1 正则表达式
 #提取字符串前4位
@@ -232,6 +235,8 @@ suicide_attacks['City'] = suicide_attacks['City'].str.strip()
 # 替换指定字符
 df_final['手机号'] = df_final['手机号'].str.replace('?',' ')
 df_final['手机号'] = df_final['手机号'].str.strip()
+#将最后一列每个数字前加上Depth
+df["new"] =[ 'Depth % i' % i for i in df["Depth"]]
 
 # 12.2 文本清洗，剔除空格，匹配接近的单词
 # 包依赖： fuzzywuzzy 
