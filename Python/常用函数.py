@@ -709,26 +709,69 @@ data_train = model.fit_transform(data_train)
 data_test = model.fit_transform(data_test)
 
 # 11. 绘制学习曲线，以确定模型的状况是否过拟合和欠拟合
-def plot_learning_curve(estimator,title, X, y,ylim=(0.8, 1.01), cv=None,
-                        train_sizes=np.linspace(.05, 0.2, 5)):
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import learning_curve
+def plot_learning_curve(estimator,title,X,y,ylim=None,cv=None,
+                        n_jobs=None,train_sizes=np.linspace(.1,1.0,10)):
     """
-    画出data在某模型上的learning curve.
-    参数解释
-    ----------
-    estimator : 你用的分类器。
-    title : 表格的标题。
-    X : 输入的feature，numpy类型
-    y : 输入的target vector
-    ylim : tuple格式的(ymin, ymax), 设定图像中纵坐标的最低点和最高点
-    cv : 做cross-validation的时候，数据分成的份数，其中一份作为cv集，其余n-1份作为training(默认为3份)
+    生成训练和测试的学习曲线图
+
+    参数:
+    ---------------------
+    estimator: object type
+
+    title: string
+           图表的标题
+
+    X: 类数组，形状(n_samples, n_features)
+
+       训练向量，其中n_samples为样本个数,n_features是特性的数量。
+
+
+    y: 类数组，形状(n_samples)或(n_samples, n_features)，可选目标相对于X进行分类或回归;
+
+
+    ylim:元组，形状(ymin, ymax)，可选定义绘制的最小和最大y值。
+
+
+    cv:int，交叉验证生成器或可迭代的，可选的确定交叉验证拆分策略。
+
+        cv的可能输入是:
+
+            -无，使用默认的3倍交叉验证，
+
+            -整数，指定折叠的次数。
+
+    n_jobs:int或None，可选(默认=None) 并行运行的作业数。'None'的意思是1。
+           “-1”表示使用所有处理器。
+
+
+    train_sizes：类数组，形状(n_ticks，)， dtype float或int
+
+                相对或绝对数量的训练例子，将用于生成学习曲线。如果dtype是float，则将其视为
+
+                训练集的最大大小的分数(这是确定的)，即它必须在(0,1)范围内。
+                否则，它被解释为训练集的绝对大小。
+
+                注意，为了分类，样本的数量通常必须足够大，可以包含每个类的至少一个示例。
+                (默认:np.linspace(0.1, 1.0, 5))
     """
+
     plt.figure()
+    plt.title(title)
+    if ylim is not None:
+        plt.ylim(*ylim)
+    plt.xlabel("Training examples")
+    plt.ylabel("Score")
     train_sizes, train_scores, test_scores = learning_curve(
-        estimator, X, y, cv=5, n_jobs=1, train_sizes=train_sizes)
+        estimator, X, y, cv=cv, n_jobs=n_jobs, train_sizes=train_sizes)
     train_scores_mean = np.mean(train_scores, axis=1)
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
     test_scores_std = np.std(test_scores, axis=1)
+    plt.grid()
+
     plt.fill_between(train_sizes, train_scores_mean - train_scores_std,
                      train_scores_mean + train_scores_std, alpha=0.1,
                      color="r")
@@ -738,14 +781,38 @@ def plot_learning_curve(estimator,title, X, y,ylim=(0.8, 1.01), cv=None,
              label="Training score")
     plt.plot(train_sizes, test_scores_mean, 'o-', color="g",
              label="Cross-validation score")
-    plt.xlabel("Training examples")
-    plt.ylabel("Score")
+
     plt.legend(loc="best")
-    plt.grid("on")
-    if ylim:
-        plt.ylim(ylim)
-    plt.title(title)
+    return plt
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import  make_gaussian_quantiles
+from sklearn.model_selection import learning_curve
+from sklearn.model_selection import ShuffleSplit
+import numpy as np
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import AdaBoostClassifier
+# ##########################
+# 生成2维正态分布，生成的数据按分位数分为两类，50个样本特征，5000个样本数据
+X,y = make_gaussian_quantiles(cov=2.0,n_samples=5000,n_features=50,
+                              n_classes=2,random_state=1)
+# 设置一百折交叉验证参数，数据集分层越多，交叉最优模型越接近原模型
+cv = ShuffleSplit(n_splits=10,test_size=0.2,random_state=1)
+# 分别画出CART分类决策树和AdaBoost分类决策树的学习曲线
+estimatorCart = DecisionTreeClassifier(max_depth=1)
+estimatorBoost = AdaBoostClassifier(base_estimator=estimatorCart,
+                                    n_estimators=270)
+# 画CART决策树和AdaBoost的学习曲线
+estimatorTuple = (estimatorCart,estimatorBoost)
+titleTuple =("decision learning curve","adaBoost learning curve")
+title = "decision learning curve"
+for i in range(2):
+    estimator = estimatorTuple[i]
+    title = titleTuple[i]
+    plot_learning_curve(estimator,title, X, y, cv=cv)
     plt.show()
+ 
 
 
 # 创建模型
