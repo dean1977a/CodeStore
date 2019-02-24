@@ -123,7 +123,10 @@ df.select_dtypes(['object']).apply(pd.Series.nunique, axis = 0)
 
 # 8. 计算两个特征平均
 sa_price = train_df.groupby('sub_area')[['work_share', 'price_doc']].mean()
-# 8.1 手工统计信息函数
+# 8.1 计算每个子类在其类别中所占的比例
+df["Order_Total"] = df.groupby('order')["ext price"].transform('sum') #根据类别分别求和
+df["Percent_of_Order"] = df["ext price"] / df["Order_Total"]          #计算子类在类别中的占比
+# 8.2 手工统计信息函数
 def stats(x):
     return pd.Series([x.count(),x.min(),x.idxmin(),
     x.quantile(.25),x.median(),
