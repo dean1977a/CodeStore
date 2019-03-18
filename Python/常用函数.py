@@ -126,7 +126,15 @@ sa_price = train_df.groupby('sub_area')[['work_share', 'price_doc']].mean()
 # 8.1 计算每个子类在其类别中所占的比例
 df["Order_Total"] = df.groupby('order')["ext price"].transform('sum') #根据类别分别求和
 df["Percent_of_Order"] = df["ext price"] / df["Order_Total"]          #计算子类在类别中的占比
-# 8.2 手工统计信息函数
+
+# 8.2 分组计算逾期情况
+def ratio(df_temp):
+    df_temp['逾期率']=df_temp['M0']/df_temp['立项编号']
+    df_temp['拖车率']=df_temp['TARGET']/df_temp['立项编号']
+    return df_temp
+df_temp= df_2018.groupby(['学历'])['立项编号','M0','TARGET'].count().apply(ratio,axis=1)
+
+# 8.3 手工统计信息函数
 def stats(x):
     return pd.Series([x.count(),x.min(),x.idxmin(),
     x.quantile(.25),x.median(),
