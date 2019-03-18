@@ -922,6 +922,8 @@ X = data_all
 data_all = transformer.fit_transform(data_train[data_train.columns[0:50]], train_y)
 
 data_all.head()
+
+#############################################################################################
 #  2. Stacking
 # Stacking Starter based on Allstate Faron's Script
 #https://www.kaggle.com/mmueller/allstate-claims-severity/stacking-starter/run/390867
@@ -1126,6 +1128,58 @@ def ks_calc_auc(data,score_col,class_col):
     fpr,tpr,threshold = roc_curve((1-data[class_col[0]]).ravel(),data[score_col[0]].ravel())
     ks = max(tpr-fpr)
     return ks
+###############################################################################################
+#绘制多个模型对比
+from sklearn.metrics 
+import accuracy_score, precision_score, recall_score, f1_score from sklearn.metrics 
+import roc_auc_score, roc_curve, auc 
+import matplotlib.pyplot as plt 
+def model_metrics(clf, X_train, X_test, y_train, y_test): 
+    # 预测 
+    y_train_pred = clf.predict(X_train) 
+    y_test_pred = clf.predict(X_test) 
+    y_train_proba = clf.predict_proba(X_train)[:, 1] 
+    y_test_proba = clf.predict_proba(X_test)[:, 1] 
+    # 准确率 
+    print('[准确率]', end=' ') 
+    print('训练集：', '%.4f' % accuracy_score(y_train, y_train_pred), end=' ') 
+    print('测试集：', '%.4f' % accuracy_score(y_test, y_test_pred)) 
+    # 精准率 
+    print('[精准率]', end=' ') 
+    print('训练集：', '%.4f' % precision_score(y_train, y_train_pred), end=' ')
+    print('测试集：', '%.4f' % precision_score(y_test, y_test_pred)) 
+    # 召回率 
+    print('[召回率]', end=' ') 
+    print('训练集：', '%.4f' % recall_score(y_train, y_train_pred), end=' ') 
+    print('测试集：', '%.4f' % recall_score(y_test, y_test_pred)) 
+    # f1-score 
+    print('[f1-score]', end=' ') 
+    print('训练集：', '%.4f' % f1_score(y_train, y_train_pred), end=' ') 
+    print('测试集：', '%.4f' % f1_score(y_test, y_test_pred)) 
+    # auc取值：用roc_auc_score或auc 
+    print('[auc值]', end=' ') 
+    print('训练集：', '%.4f' % roc_auc_score(y_train, y_train_proba), end=' ') 
+    print('测试集：', '%.4f' % roc_auc_score(y_test, y_test_proba)) 
+    # roc曲线 
+    fpr_train, tpr_train, thresholds_train = roc_curve(y_train, y_train_proba, pos_label=1) 
+    fpr_test, tpr_test, thresholds_test = roc_curve(y_test, y_test_proba, pos_label=1) 
+    label = ["Train - AUC:{:.4f}".format(auc(fpr_train, tpr_train)), "Test - AUC:{:.4f}".format(auc(fpr_test, tpr_test))] 
+    plt.plot(fpr_train, tpr_train) 
+    plt.plot(fpr_test, tpr_test) 
+    plt.plot([0, 1], [0, 1], 'd--') 
+    plt.xlabel('False Positive Rate') 
+    plt.ylabel('True Positive Rate') 
+    plt.legend(label, loc=4) 
+    plt.title("ROC curve") 
+    plt.show() 
+if __name__ == "__main__": 
+    model_metrics(log_reg, X_train, X_test, y_train, y_test) 
+    model_metrics(dtree, X_train, X_test, y_train, y_test) 
+    model_metrics(LinearSVC, X_train, X_test, y_train, y_test) 
+    model_metrics(xgbClassifier, X_train, X_test, y_train, y_test) 
+    model_metrics(lgbmClassifier, X_train, X_test, y_train, y_test)
+
+############################################################################################################################
 #贝叶斯参数优化
 from bayes_opt import BayesianOptimization
 
@@ -1164,3 +1218,4 @@ def bayes_parameter_opt_lgb(X, y, init_round=15, opt_round=25, n_folds=5, random
     
     # return best parameters
     return lgbBO.res['max']['max_params']
+
