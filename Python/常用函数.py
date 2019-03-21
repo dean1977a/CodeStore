@@ -240,7 +240,13 @@ df_final = pd.merge(df,pd.DataFrame(df['承租人'].str.split('-',expand=True)),
 
 # 12.1 文本处理 
 # convert to lower case  转小写
+#方法1
 suicide_attacks['City'] = suicide_attacks['City'].str.lower()
+suicide_attacks['City'] = suicide_attacks['City'].str.upper()
+#方法2
+loandata[‘term’]=loandata[‘term’].map(str.upper)
+loandata[‘term’]=loandata[‘term’].map(str.lower)
+loandata[‘term’]=loandata[‘term’].map(str.title)
 # remove trailing white spaces   去空格
 suicide_attacks['City'] = suicide_attacks['City'].str.strip()
 # 替换指定字符
