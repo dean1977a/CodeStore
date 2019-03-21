@@ -133,8 +133,25 @@ def ratio(df_temp):
     df_temp['拖车率']=df_temp['TARGET']/df_temp['立项编号']
     return df_temp
 df_temp= df_2018.groupby(['学历'])['立项编号','M0','TARGET'].count().apply(ratio,axis=1)
+# 8.3 绘制逾期分析表
+#     var为需要做分类汇总的列名
+def groupby_fun(var):
+    def ratio(df_temp):   
+        df_temp['逾期率']=df_temp['M0']/df_temp['立项编号']
+        df_temp['3个月内拖车率']=df_temp['3个月内拖车']/df_temp['立项编号']
+        #df_temp['6个月内拖车率']=df_temp['6个月内拖车']/df_temp['立项编号']
+        df_temp['拖车率']=df_temp['TARGET']/df_temp['立项编号']
+        return df_temp
+    df_temp_1 = df_2018.groupby([var])['立项编号','M0','3个月内拖车','TARGET'].count().apply(ratio,axis=1)
+    df_temp_2 = pd.DataFrame(df_temp_1['立项编号']/ np.sum(df_temp_1['立项编号'])).rename(columns={'立项编号':'区间占比'})
+    df_temp = pd.merge(df_temp_1,df_temp_2,left_index=True,right_index=True)
+    order = ['立项编号', '区间占比', 'M0', '3个月内拖车', 'TARGET', '逾期率', '3个月内拖车率', '拖车率']
+    df_temp_all = df_temp[order]   
+    df_temp_all.rename(columns={'TARGET':'拖车','M0':'逾期'},inplace=True)
+    return df_temp_all
+groupby_fun('分公司')
 
-# 8.3 手工统计信息函数
+# 8.4 手工统计信息函数
 def stats(x):
     return pd.Series([x.count(),x.min(),x.idxmin(),
     x.quantile(.25),x.median(),
@@ -148,7 +165,7 @@ def stats(x):
     'Var','Std','Skew','Kurt'])
 df.apply(stats)
 
-# 8.2 查看类别属性占比
+# 8.5 查看类别属性占比
 housing["income_cat"].value_counts() / len(housing)
 
 #9 手工匹配字符串并map或者apply示例
