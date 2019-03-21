@@ -144,14 +144,14 @@ def groupby_fun(var,sort):
         return df_temp
     df_temp_1 = df_2018.groupby([var])['立项编号','M0','3个月内拖车','TARGET'].count().apply(ratio,axis=1)
     df_temp_2 = pd.DataFrame(df_temp_1['立项编号']/ np.sum(df_temp_1['立项编号'])).rename(columns={'立项编号':'区间占比'})
-    df_temp = pd.merge(df_temp_1,df_temp_2,left_index=True,right_index=True)
-    order = ['立项编号', '区间占比', 'M0', '3个月内拖车', 'TARGET', '逾期率', '3个月内拖车率', '拖车率']
-    df_temp_all = df_temp[order]   
-    df_temp_all.rename(columns={'TARGET':'拖车','M0':'逾期'},inplace=True)
+    df_temp_all = pd.merge(df_temp_1,df_temp_2,left_index=True,right_index=True)  
+    df_temp_all.rename(columns={'立项编号':'交车数','TARGET':'拖车','M0':'逾期'},inplace=True)
+    order = ['交车数', '区间占比', '逾期', '3个月内拖车', '拖车', '逾期率', '3个月内拖车率', '拖车率']
+    df_temp_all = df_temp_all[order] 
     if sort == True:
         df_temp_all = df_temp_all.sort_values('3个月内拖车率',ascending=False)
     return df_temp_all
-groupby_fun('分公司')
+groupby_fun('分公司',True)
 
 # 8.4 手工统计信息函数
 def stats(x):
