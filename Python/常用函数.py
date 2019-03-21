@@ -135,7 +135,7 @@ def ratio(df_temp):
 df_temp= df_2018.groupby(['学历'])['立项编号','M0','TARGET'].count().apply(ratio,axis=1)
 # 8.3 绘制逾期分析表
 #     var为需要做分类汇总的列名
-def groupby_fun(var):
+def groupby_fun(var,sort):
     def ratio(df_temp):   
         df_temp['逾期率']=df_temp['M0']/df_temp['立项编号']
         df_temp['3个月内拖车率']=df_temp['3个月内拖车']/df_temp['立项编号']
@@ -148,6 +148,8 @@ def groupby_fun(var):
     order = ['立项编号', '区间占比', 'M0', '3个月内拖车', 'TARGET', '逾期率', '3个月内拖车率', '拖车率']
     df_temp_all = df_temp[order]   
     df_temp_all.rename(columns={'TARGET':'拖车','M0':'逾期'},inplace=True)
+    if sort == True:
+        df_temp_all = df_temp_all.sort_values('3个月内拖车率',ascending=False)
     return df_temp_all
 groupby_fun('分公司')
 
