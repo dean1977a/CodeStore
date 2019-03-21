@@ -134,24 +134,26 @@ def ratio(df_temp):
     return df_temp
 df_temp= df_2018.groupby(['学历'])['立项编号','M0','TARGET'].count().apply(ratio,axis=1)
 # 8.3 绘制逾期分析表
-#     var为需要做分类汇总的列名
-def groupby_fun(var,sort):
+# df：表名    
+# var：需要做分类汇总的列名
+# sort：boolean是否排序
+def groupby_fun(df,var,sort):
     def ratio(df_temp):   
         df_temp['逾期率']=df_temp['M0']/df_temp['立项编号']
         df_temp['3个月内拖车率']=df_temp['3个月内拖车']/df_temp['立项编号']
         #df_temp['6个月内拖车率']=df_temp['6个月内拖车']/df_temp['立项编号']
         df_temp['拖车率']=df_temp['TARGET']/df_temp['立项编号']
         return df_temp
-    df_temp_1 = df_2018.groupby([var])['立项编号','M0','3个月内拖车','TARGET'].count().apply(ratio,axis=1)
-    df_temp_2 = pd.DataFrame(df_temp_1['立项编号']/ np.sum(df_temp_1['立项编号'])).rename(columns={'立项编号':'区间占比'})
+    df_temp_1 = df.groupby([var])['立项编号','M0','3个月内拖车','TARGET'].count().apply(ratio,axis=1)
+    df_temp_2 = pd.DataFrame(df_temp_1['立项编号']/ np.sum(df_temp_1['立项编号'])).rename(columns={'立项编号':'占全体交车比率'})
     df_temp_all = pd.merge(df_temp_1,df_temp_2,left_index=True,right_index=True)  
     df_temp_all.rename(columns={'立项编号':'交车数','TARGET':'拖车','M0':'逾期'},inplace=True)
-    order = ['交车数', '区间占比', '逾期', '3个月内拖车', '拖车', '逾期率', '3个月内拖车率', '拖车率']
+    order = ['交车数', '占全体交车比率', '逾期', '3个月内拖车', '拖车', '逾期率', '3个月内拖车率', '拖车率']
     df_temp_all = df_temp_all[order] 
     if sort == True:
-        df_temp_all = df_temp_all.sort_values('3个月内拖车率',ascending=False)
+        df_temp_all = df_temp_all.sort_values('逾期率',ascending=False)  
     return df_temp_all
-groupby_fun('分公司',True)
+groupby_fun(df,'分公司',True)
 
 # 8.4 手工统计信息函数
 def stats(x):
