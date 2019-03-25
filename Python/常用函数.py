@@ -144,7 +144,7 @@ def groupby_fun(df,var,sort):
         #df_temp['6个月内拖车率']=df_temp['6个月内拖车']/df_temp['立项编号']
         df_temp['拖车率']=df_temp['TARGET']/df_temp['立项编号']
         return df_temp
-    df_temp_1 = df.groupby([var])['立项编号','M0','3个月内拖车','TARGET'].count().apply(ratio,axis=1)
+    df_temp_1 = df.groupby(var)['立项编号','M0','3个月内拖车','TARGET'].count().apply(ratio,axis=1)
     df_temp_2 = pd.DataFrame(df_temp_1['立项编号']/ np.sum(df_temp_1['立项编号'])).rename(columns={'立项编号':'占全体交车比率'})
     df_temp_all = pd.merge(df_temp_1,df_temp_2,left_index=True,right_index=True)  
     df_temp_all.rename(columns={'立项编号':'交车数','TARGET':'拖车','M0':'逾期'},inplace=True)
@@ -153,7 +153,10 @@ def groupby_fun(df,var,sort):
     if sort == True:
         df_temp_all = df_temp_all.sort_values('逾期率',ascending=False)  
     return df_temp_all
-groupby_fun(df,'分公司',True)
+df = groupby_fun(df,'分公司',True)
+#行求和
+df.loc['Row_sum'] = df.apply(lambda x: x.sum())
+
 
 # 8.4 手工统计信息函数
 def stats(x):
