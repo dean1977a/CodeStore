@@ -28,7 +28,10 @@ import pickle
 import sys
 import gc
 
-
+%matplotlib inline
+mpl.style.use('ggplot')
+sns.set_style('white')
+pylab.rcParams['figure.figsize'] = 12,8
 folderOfData = 'C:\\Users\\Dean\\Desktop\\model'
 warnings.filterwarnings("ignore")
 init_notebook_mode(connected=True)
