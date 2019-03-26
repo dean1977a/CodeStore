@@ -156,40 +156,25 @@ def knowningData(df, data_type=object, limit=3): #seting the function with df,
         # print("Percentual of top 3 of: ", column)
         # print(round(df[column].value_counts()[:3] / df[column].value_counts().sum() * 100,2))
 print("#############################################")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#split categorical, discrete and numerical features  切分类别变量和数值变量
+def feature_type_split(data,special_num_list=[],special_cat_list=[]):
+    cat_list = []
+    dis_num_list = []
+    num_list = []
+    for i in data.columns.tolist():
+        if data[i].dtype == 'object':
+            cat_list.append(i)
+        elif i in special_cat_list:     # if you want to add some special cases
+            cat_list.append(i)
+        elif i in special_num_list:     # if you want to add some special cases
+            num_list.append(i)
+        elif data[i].nunique() < 10:
+            dis_num_list.append(i)
+        else:
+            num_list.append(i)
+    return cat_list, dis_num_list, num_list
+categorical_var, dis_num_list, numerical_var = feature_type_split(trainData, special_num_list=['回溯_近7日APP使用次数',],
+special_cat_list=['HAS_CHILD','BJ_HIT_RULE','BJ_BLACK_LIST','BAIDU_BLACK_LIST','AMT_REQ_CREDIT_BUREAU_7DAYS_SCORE','bj_rule','bj_black_list'])
 
 
 
