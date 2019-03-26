@@ -23,7 +23,6 @@ from pylab import mpl
 import seaborn as sns
 import pandas as pd
 import numpy as np 
-import random 
 import warnings
 import random
 import pickle
