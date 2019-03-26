@@ -173,8 +173,9 @@ def feature_type_split(data,special_num_list=[],special_cat_list=[]):
         else:
             num_list.append(i)
     return cat_list, dis_num_list, num_list
+#示例
 categorical_var, dis_num_list, numerical_var = feature_type_split(trainData, special_num_list=['回溯_近7日APP使用次数',],
-special_cat_list=['HAS_CHILD','BJ_HIT_RULE','BJ_BLACK_LIST','BAIDU_BLACK_LIST','AMT_REQ_CREDIT_BUREAU_7DAYS_SCORE','bj_rule','bj_black_list'])
+special_cat_list=['HAS_CHILD','BJ_HIT_RULE','BJ_BLACK_LIST','BAIDU_BLACK_LIST'])
 
 
 
