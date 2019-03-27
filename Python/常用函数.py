@@ -340,7 +340,14 @@ def groupby_fun(df,var,sort):
 df = groupby_fun(df,'分公司',True)
 #行求和
 df.loc['Row_sum'] = df.apply(lambda x: x.sum())
-
+#groupby取最大值
+get_max = lambda x: x.value_counts(dropna=False).index[0]
+# python就是灵活啊。
+get_max.__name__ = "most frequent"
+df.agg({'ext price': ['sum', 'mean'], 
+        'quantity': ['sum', 'mean'], 
+        'unit price': ['mean'], 
+        'sku': [get_max]})
 
 # 8.4 手工统计信息函数
 def stats(x):
