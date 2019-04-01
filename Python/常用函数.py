@@ -110,6 +110,33 @@ def gp(col, title):
 
     fig = go.Figure(data=data, layout=layout)
     iplot(fig, filename='grouped-bar')
+    
+def exploreCat(col):
+    t = application[col].value_counts()
+    labels = t.index
+    values = t.values
+    colors = ['#96D38C','#FEBFB3']
+    trace = go.Pie(labels=labels, values=values,
+                   hoverinfo="all", textinfo='value',
+                   textfont=dict(size=12),
+                   marker=dict(colors=colors,
+                               line=dict(color='#fff', width=2)))
+    layout = go.Layout(title=col, height=400)
+    fig = go.Figure(data=[trace], layout=layout)
+    iplot(fig)
+
+#the realation between the categorical column and the target 
+def catAndTrgt(col):
+    tr0 = bar_hor(application, col, "Distribution of "+col ,"#f975ae", w=700, lm=100, return_trace= True)
+    tr1, tr2 = gp(col, 'Distribution of Target with ' + col)
+
+    fig = tools.make_subplots(rows=1, cols=3, print_grid=False, subplot_titles = [col +" Distribution" , "% Rpyment difficulty by "+col ,"% of otherCases by "+col])
+    fig.append_trace(tr0, 1, 1);
+    fig.append_trace(tr1, 1, 2);
+    fig.append_trace(tr2, 1, 3);
+    fig['layout'].update(height=350, showlegend=False, margin=dict(l=50));
+    iplot(fig);
+    
 # Function to calculate missing values by column# Funct 
 def missing_values_table(df):
         # Total missing values
