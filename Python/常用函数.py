@@ -27,16 +27,17 @@ import random
 import pickle
 import sys
 import gc
-
+warnings.filterwarnings("ignore")
 %matplotlib inline
 mpl.style.use('ggplot')
 sns.set_style('white')
+plt.rcParams['font.sans-serif']=['Simhei']
+plt.rcParams['axes.unicode_minus']=False
 pylab.rcParams['figure.figsize'] = 12,8
-folderOfData = 'C:\\Users\\Dean\\Desktop\\model'
-warnings.filterwarnings("ignore")
-init_notebook_mode(connected=True)
 pd.set_option('max_columns',300) 
-pd.set_option('max_row',300)
+pd.set_option('max_row',300)覆盖表
+init_notebook_mode(connected=True)
+folderOfData = 'C:\\Users\\Dean\\Desktop\\model'
 sys.path.append(folderOfData)
 path = "../input/"
 
