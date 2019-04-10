@@ -41,6 +41,39 @@ folderOfData = 'C:\\Users\\Dean\\Desktop\\model'
 sys.path.append(folderOfData)
 path = "../input/"
 
+#绘制类别变量中各子变量与target的柱状图和折现图
+def plotbar(df,var,target):
+    a=df.groupby([var])[target].mean().reset_index()
+    b=df.groupby([var])[target].count().reset_index()
+    b=b.merge(a,on=var,how="left").rename(columns={target+"_x":"counts",target+"_y":"rate"})
+    summary=b
+    summary=summary.sort_index(by="rate",ascending=False)
+    summary["占比"]=summary["counts"]/summary["counts"].sum()
+    summary["累计"]=summary["占比"].cumsum()#     summary=summary.sort_values(by="rate")
+    name=str(b[var].tolist())
+    ticks=range(len(b))
+    y=b["counts"]
+    #y1=aa["target"]
+    fig = plt.figure(figsize=(10,6)
+                              ,facecolor='#ffffcc',edgecolor='#ffffcc')#图片大小
+    plt.grid(axis='y',color='#8f8f8f',linestyle='--', linewidth=1 )
+    plt.xticks(rotation=60,fontsize=15)
+    plt.xlabel('xlabel', fontsize=30)
+    plt.yticks(fontsize=15)
+    ax1 = fig.add_subplot(111)#添加第一副图
+    ax2 = ax1.twinx()#共享x轴，这句很关键！
+    plt.yticks(fontsize=15)
+    plt.ylabel('ylabel', fontsize=30)
+    sns.pointplot(b[var],b["rate"],marker="o",ax=ax1)
+    sns.barplot(b[var],b["counts"],ax=ax2,alpha=0.5)
+    for a,b in zip(ticks,y):
+        plt.text(a-0.3,b ,str(b),fontsize=20)
+    ax1.set_ylabel('rate', size=18)
+    ax2.set_ylabel('counts', size=18)
+    return summary
+#示例
+plotbar(df,'gender,'target')
+
 def bar_hor(df, col, title, color, w=None, h=None, lm=0, limit=100, return_trace=False, rev=False, xlb = False):
     """
     横向き棒グラフ作成関数
