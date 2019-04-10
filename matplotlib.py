@@ -74,7 +74,7 @@ def plotbar(df,var,target):
     ax2.set_ylabel('counts', size=18)
     return summary
 #示例
-plotbar(df,'gender,'target')11
+plotbar(df,'gender,'target')
 ########################################################################################################
 # 箱型图特征分析
 fig, [ax1,ax2] = plt.subplots(1,2,figsize=(20,6))
