@@ -1510,3 +1510,56 @@ def bayes_parameter_opt_lgb(X, y, init_round=15, opt_round=25, n_folds=5, random
     # return best parameters
     print("Final result:", optimizer.max)
 
+##################################################################################################################################
+#RandomSearch参数优化
+
+class RandomSearch(object):
+    
+    def __init__(self,X_train,y_train,model,hyperparameters):
+        
+        self.X_train = X_train
+        self.y_train = y_train
+        self.model = model
+        self.hyperparameters = hyperparameters
+        
+    def RandomSearch(self):
+        # Create randomized search 10-fold cross validation and 100 iterations
+        cv = 10
+        clf = RandomizedSearchCV(self.model,
+                                 self.hyperparameters,
+                                 random_state=1,
+                                 n_iter=100,
+                                 cv=cv,
+                                 verbose=0,
+                                 n_jobs=-1,
+                                 )
+        # Fit randomized search
+        best_model = clf.fit(self.X_train, self.y_train)
+        message = (best_model.best_score_, best_model.best_params_)
+        print("Best: %f using %s" % (message))
+
+        return best_model,best_model.best_params_
+    
+    def BestModelPridict(self,X_test):
+        
+        best_model,_ = self.RandomSearch()
+        pred = best_model.predict(X_test)
+        return pred
+  #示例
+  # model
+model = LogisticRegression()
+# Create regularization penalty space
+penalty = ['l1', 'l2']
+
+# Create regularization hyperparameter distribution using uniform distribution
+C = uniform(loc=0, scale=4)
+
+# Create hyperparameter options
+hyperparameters = dict(C=C, penalty=penalty)
+        
+LR_RandSearch = RandomSearch(X_train_sc,y_train_sc,model,hyperparameters)
+# LR_best_model,LR_best_params = LR_RandSearch.RandomSearch()
+Prediction_LR = LR_RandSearch.BestModelPridict(X_test_sc)
+        
+
+   
