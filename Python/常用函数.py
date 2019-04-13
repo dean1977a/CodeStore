@@ -1477,6 +1477,7 @@ X = application_train.drop('TARGET', axis=1)
 y = application_train.TARGET
 def bayes_parameter_opt_lgb(X, y, init_round=15, opt_round=25, n_folds=5, random_seed=6, n_estimators=10000, learning_rate=0.05, output_process=False):
     # prepare data
+    # categorical_feature如果不需要定义可以删掉
     train_data = lgb.Dataset(data=X, label=y, categorical_feature = categorical_feats, free_raw_data=False)
     # parameters
     def lgb_eval(num_leaves, feature_fraction, bagging_fraction, max_depth, lambda_l1, lambda_l2, min_split_gain, min_child_weight):
