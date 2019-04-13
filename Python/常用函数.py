@@ -1475,13 +1475,13 @@ from bayes_opt import BayesianOptimization
 
 X = application_train.drop('TARGET', axis=1)
 y = application_train.TARGET
-def bayes_parameter_opt_lgb(X, y, init_round=15, opt_round=25, n_folds=5, random_seed=6, n_estimators=10000, learning_rate=0.05, output_process=False):
+def bayes_parameter_opt_lgb(X, y, init_round=15, opt_round=25, n_folds=5, random_seed=6, n_estimators=10000, learning_rate=0.1, output_process=False):
     # prepare data
     # categorical_feature如果不需要定义可以删掉
     train_data = lgb.Dataset(data=X, label=y, categorical_feature = categorical_feats, free_raw_data=False)
     # parameters
     def lgb_eval(num_leaves, feature_fraction, bagging_fraction, max_depth, lambda_l1, lambda_l2, min_split_gain, min_child_weight):
-        params = {'application':'binary','num_iterations': n_estimators, 'learning_rate':learning_rate, 'early_stopping_round':100, 'metric':'auc'}
+        params = {'application':'binary','num_iterations': n_estimators, 'learning_rate':learning_rate, 'early_stopping_round':150, 'metric':'auc'}
         params["num_leaves"] = int(round(num_leaves))
         params['feature_fraction'] = max(min(feature_fraction, 1), 0)
         params['bagging_fraction'] = max(min(bagging_fraction, 1), 0)
@@ -1502,11 +1502,11 @@ def bayes_parameter_opt_lgb(X, y, init_round=15, opt_round=25, n_folds=5, random
                                             'min_split_gain': (0.001, 0.1),
                                             'min_child_weight': (5, 50)}, random_state=0)
     # optimize
-    lgbBO.maximize(init_points=init_round, n_iter=opt_round)
+    optimizer.maximize(init_points=init_round, n_iter=opt_round)
     
     # output optimization process
     if output_process==True: lgbBO.points_to_csv("bayes_opt_result.csv")
     
     # return best parameters
-    return lgbBO.res['max']['max_params']
+    print("Final result:", optimizer.max)
 
