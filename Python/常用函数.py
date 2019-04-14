@@ -269,7 +269,10 @@ df = df_raw[df_raw.make.isin(models)].copy()
 #等同于
 df = df_raw[df_raw['make'].isin(models)].copy()
 
-# 1.3剔除异常值
+# 1.3查找异常值
+df['sta'] = (df['price']-df['price'].mean())/df['price'].mean()
+df[df['sta'].abs > 3]        
+# 1.4剔除异常值
 def outlier_processing(df,col):
     s=df[col]
     oneQuoter=s.quantile(0.25)
