@@ -85,6 +85,11 @@ def reduce_mem_usage(df_):
     print('Decreased by {:.1f}%'.format(100 * (start_mem - end_mem) / start_mem))
     
     return df_
+def import_data(file):
+    """create a dataframe and optimize its memory usage"""
+    df = pd.read_csv(file, parse_dates=True, keep_date_col=True)
+    df = reduce_mem_usage(df)
+    return df
 
 
 # ## For EDA
