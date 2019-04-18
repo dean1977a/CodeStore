@@ -246,8 +246,17 @@ special_cat_list=['HAS_CHILD','BJ_HIT_RULE','BJ_BLACK_LIST','BAIDU_BLACK_LIST'])
 # 数据预处理
 # 1. 读取数据：
 data_macro = pd.read_csv("macro.csv", parse_dates=['timestamp'], usecols=['timestamp'] + macro_cols)
+        
+# 1.1  读取多个文件，然后进行拼接        
+import os
+import glob
+os.chdir("/mydir")
+extension = 'csv'
+all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
+combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames ])
+combined_csv.to_csv( "combined_csv.csv", index=False, encoding='utf-8-sig')
 
-# 1.1多条件筛选方法一
+# 2.1多条件筛选方法一
 f = (footballers
          .loc[footballers['Position'].isin(['ST', 'GK'])]
          .loc[:, ['Value', 'Overall', 'Aggression', 'Position']]
@@ -256,10 +265,10 @@ f = f[f["Overall"] >= 80]
 f = f[f["Overall"] < 85]
 f['Aggression'] = f['Aggression'].astype(float)
 
-# 1.2多条件筛选方法二
+# 2.2多条件筛选方法二
 data[(data['CREDIT_TYPE']=='Consumer credit')&(data['AMT_ANNUITY']>0)]['AMT_ANNUITY'].sample(100)
 
-# 1.3多条件筛选方法三
+# 2.3多条件筛选方法三
 #在导入数据阶段直接进行筛选作业
 # Define a list of models that we want to review 定义感兴趣的数据关键字
 models = ["toyota","nissan","mazda", "honda", "mitsubishi", "subaru", "volkswagen", "volvo"]
@@ -269,10 +278,10 @@ df = df_raw[df_raw.make.isin(models)].copy()
 #等同于
 df = df_raw[df_raw['make'].isin(models)].copy()
 
-# 1.3查找异常值
+# 2.4查找异常值
 df['sta'] = (df['price']-df['price'].mean())/df['price'].mean()
 df[df['sta'].abs > 3]        
-# 1.4剔除异常值
+# 2.5剔除异常值
 def outlier_processing(df,col):
     s=df[col]
     oneQuoter=s.quantile(0.25)
@@ -284,7 +293,7 @@ def outlier_processing(df,col):
     df=df[df[col]>=min]
     return df
 
-# 2. 显示为object的属性：
+# 2.6 显示为object的属性：
 data_train.dtypes[data_train.dtypes=='object']
 
 # 3. 改变数据类型
