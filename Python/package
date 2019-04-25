@@ -20,7 +20,7 @@ scikit-learn-contrib/boruta_py              #Brouta特征降维策略，保留�
 pymc-devs/pymc3                             #用Python编写的开源的概率编程框架，使用Theano通过变分推理进行梯度计算，并使用了C实现加速运算
 
 
-
+airflow                                   #pipeline工具
 steppy                                    #pipeline
 Speedml/speedml                           #快速EDA工具
 abhayspawar/featexp                       #特征探索
