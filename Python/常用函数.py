@@ -359,6 +359,24 @@ for c in X.columns:
     col_type = X[c].dtype
     if col_type == 'object' or col_type.name == 'category':
         X[c] = X[c].astype('category')
+        
+# 3.7构建新特征
+def recode_gender(gender):
+
+    # Return 0 if gender is 'Female'
+    if  gender == 'Male':
+        return 1
+    
+    # Return 1 if gender is 'Male'    
+    elif gender == 'Female':
+        return 0
+    
+    # Return np.nan    
+    else:
+        return np.nan
+
+# Apply the function to the sex column
+tips['recode'] = tips['sex'].apply(recode_gender)        
 
 
 
