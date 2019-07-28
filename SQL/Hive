@@ -1,0 +1,34 @@
+1.日期比较函数: datediff语法: datediff(string enddate,string startdate) 
+返回值: int 
+说明: 返回结束日期减去开始日期的天数。 
+
+举例：
+
+hive> select datediff('2016-12-30','2016-12-29');
+
+       1
+
+2.日期增加函数: date_add语法: date_add(string startdate, intdays) 
+返回值: string 
+说明: 返回开始日期startdate增加days天后的日期。 
+
+举例：
+
+hive>select date_add('2016-12-29',10);
+
+2017-01-08
+
+3.日期减少函数: date_sub语法: date_sub (string startdate,int days) 
+返回值: string 
+
+说明: 返回开始日期startdate减少days天后的日期。 
+
+举例：
+
+hive>select date_sub('2016-12-29',10);
+
+    2016-12-19
+
+4.查询近30天的数据
+
+select * from table where  datediff(current_timestamp,create_time)<=30；
