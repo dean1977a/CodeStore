@@ -32,3 +32,124 @@ hive>select date_sub('2016-12-29',10);
 4.查询近30天的数据
 
 select * from table where  datediff(current_timestamp,create_time)<=30；
+
+
+5.获取当前UNIX时间戳函数: unix_timestamp语法: unix_timestamp()
+返回值: bigint
+说明: 获得当前时区的UNIX时间戳
+举例：
+
+hive> select unix_timestamp() from dual;
+OK
+1455616811
+Time taken: 0.785 seconds, Fetched: 1 row(s)
+
+6.日期函数UNIX时间戳转日期函数: from_unixtime
+
+语法:from_unixtime(bigint unixtime[, string format])
+返回值: string
+说明: 转化UNIX时间戳（从1970-01-01 00:00:00 UTC到指定时间的秒数）到当前时区的时间格式
+举例：
+
+hive> select from_unixtime(1455616811,'yyyyMMdd') from dual;
+OK
+20160216
+Time taken: 0.221 seconds, Fetched: 1 row(s)
+
+7.日期转UNIX时间戳函数: unix_timestamp语法:unix_timestamp(string date) 
+返回值:bigint
+说明: 转换格式为“yyyy-MM-dd HH:mm:ss“的日期到UNIX时间戳。如果转化失败，则返回0。
+举例：
+
+hive> select unix_timestamp('2016-02-16 14:02:03') from dual;
+OK
+1455602523
+Time taken: 0.265 seconds, Fetched: 1 row(s)
+
+8.指定格式日期转UNIX时间戳函数: unix_timestamp语法:   unix_timestamp(string date, string pattern) 
+返回值:   bigint
+说明: 转换pattern格式的日期到UNIX时间戳。如果转化失败，则返回0。
+举例：
+
+hive> select unix_timestamp('20160216 14:02:03','yyyyMMdd HH:mm:ss') from dual;
+OK
+1455602523
+Time taken: 0.21 seconds, Fetched: 1 row(s)
+
+9.日期时间转日期函数: to_date
+
+语法:   to_date(string timestamp) 
+返回值:   string
+说明: 返回日期时间字段中的日期部分。
+举例：
+
+hive> select to_date('2016-02-16 14:02:03') from dual;
+OK
+2016-02-16
+Time taken: 0.222 seconds, Fetched: 1 row(s)
+
+10.日期转年函数: year
+
+语法:   year(string date) 
+返回值: int
+说明: 返回日期中的年。
+举例：
+
+hive> select year('2016-02-16 14:02:03') from dual;
+OK
+2016
+Time taken: 0.255 seconds, Fetched: 1 row(s)
+
+hive> select year('2016-02-16') from dual;
+OK
+2016
+Time taken: 0.325 seconds, Fetched: 1 row(s)
+
+11.日期转月函数: month
+
+语法: month   (string date) 
+返回值: int
+说明: 返回日期中的月份。
+举例:同上
+
+12.日期转天函数: day
+
+语法: day   (string date) 
+返回值: int
+说明: 返回日期中的天。
+举例：同上
+
+13.日期转小时函数: hour
+
+语法: hour   (string date) 
+返回值: int
+说明: 返回日期中的小时。
+举例：同上
+
+14.日期转分钟函数: minute
+
+语法: minute   (string date) 
+返回值: int
+说明: 返回日期中的分钟。
+举例：同上
+
+15.日期转秒函数: second
+
+语法: second   (string date) 
+返回值: int
+说明: 返回日期中的秒。
+举例：同上
+
+16.日期转周函数: weekofyear
+
+语法:   weekofyear (string date) 
+返回值: int
+说明: 返回日期在当前的周数。
+举例：
+
+hive> select weekofyear('2016-02-16') from dual;
+OK
+7
+Time taken: 0.213 seconds, Fetched: 1 row(s)
+
+
