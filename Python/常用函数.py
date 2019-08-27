@@ -1178,6 +1178,42 @@ importance = model.get_fscore()
 df_importance = pd.DataFrame(importance, columns=['feature', 'fscore'])
 df_importance.sort_values(ascending=False)
 
+# 创建sklearn API xgb模型
+model = xgb.XGBClassifier(n_estimators=200,
+                                   max_depth=3, 
+                                   learning_rate=0.1, 
+                                   subsample=0.7, 
+                                   colsample_bytree=0.7,
+                                   verbosity=1, 
+                                   silent=None, 
+                                   objective='binary:logistic', 
+                                   booster='gbtree',
+                                   scale_pos_weight=30,
+                                   n_jobs=-1)
+
+model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_test, y_test)],eval_metric='auc',early_stopping_rounds=100)        
+        
+      
+        
+# 使用模型预测跨时间验证集
+X_out = OUTTIME_Base_creatval.drop(['response'],axis=1)
+y_out = OUTTIME_Base_creatval.response  
+y_pred = model.predict_proba(X_out)[:,1]
+auc_out = roc_auc_score(y_out,y_pred)
+print('Auc_out: {}'.format(auc_out))        
+ 
+# 画feature_importance
+%matplotlib inline
+fig, ax = plt.subplots(1, 1, figsize=(8, 60))
+xgb.plot_importance(model, height=0.5, ax=ax)        
+
+xgb_fea_imp=pd.DataFrame(list(model.get_booster().get_fscore().items()),
+xgb_fea_imp.columns=['feature','importance']).sort_values('importance', ascending=False)
+print('',xgb_fea_imp)
+xgb_fea_imp.to_csv('xgb_fea_imp.csv')
+        
+        
+        
 # 其他
 # 去除共线性
 from statsmodels.stats.outliers_influence import variance_inflation_factor
