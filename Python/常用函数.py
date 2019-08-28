@@ -731,6 +731,15 @@ print("#############################################")
 temp.columns = ["_".join(x) for x in temp.columns.ravel()]
 
 
+#17 将df按时间进行索引，通过pd.cut函数，按照时间进行分组，每个组并乘以各自的的labels值     
+df.set_index('date_time', inplace=True)
+def apply_tariff_cut(df):
+    cents_per_kwh = pd.cut(x=df.index.hour,
+                           bins=[0, 7, 17, 24],
+                           include_lowest=True,
+                           labels=[12, 20, 28]).astype(int)
+    df['cost_cents'] = cents_per_kwh * df['energy_kwh']
+apply_tariff_cut(df)
 
 # 数据可视化
 import matplotlib.pyplot as plt
