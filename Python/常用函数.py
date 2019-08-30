@@ -377,6 +377,19 @@ def recode_gender(gender):
 
 # Apply the function to the sex column
 tips['recode'] = tips['sex'].apply(recode_gender)        
+        
+#3.8 Feature Scaling
+## We will be using standardscaler to transform
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+
+## transforming "train_x"
+X_train = sc.fit_transform(X_train)
+## transforming "test_x"
+X_test = sc.transform(X_test)
+
+## transforming "The testset"
+test = sc.transform(test)
 
 
 
