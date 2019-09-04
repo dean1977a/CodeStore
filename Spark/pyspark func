@@ -17,9 +17,11 @@
                     **选择一列或多列：select**
                     **重载的select方法：**
                     **还可以用where按条件选择**
+                    
             --- 1.3 排序 ---
             --- 1.4 抽样 ---
             --- 1.5 按条件筛选when / between ---
+                    **条件过滤**
     2、-------- 增、改 --------
             --- 2.1 新建数据 ---
             --- 2.2 新增数据列 withColumn---
@@ -127,21 +129,13 @@ root
  |-- e: string (nullable = true)
 ...
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
+
 
 如上图所示，只是打印出来。
 去重set操作
 
 data.select('columns').distinct().show()
 
-    1
 
 跟py中的set一样，可以distinct()一下去重，同时也可以.count()计算剩余个数
 随机抽样
@@ -158,7 +152,6 @@ pyspark之中
 
 sample = result.sample(False,0.5,0) # randomly select 50% of lines 
 
-    1
 
 — 1.2 列元素操作 —
 获取Row元素的所有列名：
@@ -166,8 +159,6 @@ sample = result.sample(False,0.5,0) # randomly select 50% of lines
 r = Row(age=11, name='Alice')
 print r.columns    #  ['age', 'name']
 
-    1
-    2
 
 选择一列或多列：select
 
@@ -178,25 +169,19 @@ df.select(df[‘name’], df[‘age’]+1)
 df.select(df.a, df.b, df.c)    # 选择a、b、c三列
 df.select(df["a"], df["b"], df["c"])    # 选择a、b、c三列
 
-    1
-    2
-    3
-    4
-    5
-    6
+
 
 重载的select方法：
 
 jdbcDF.select(jdbcDF( "id" ), jdbcDF( "id") + 1 ).show( false)
 
-    1
 
 会同时显示id列 + id + 1列
 还可以用where按条件选择
 
 jdbcDF .where("id = 1 or c1 = 'b'" ).show()
 
-    1
+
 
 — 1.3 排序 —
 
@@ -264,20 +249,11 @@ demo1
 |  Bob|                                                           1|
 +-----+------------------------------------------------------------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
 
 demo 2:多个when串联
 
 df = df.withColumn('mod_val_test1',F.when(df['rand'] <= 0.35,1).when(df['rand'] <= 0.7, 2).otherwise(3))
 
-    1
 
 between(lowerBound, upperBound)
 筛选出某个范围内的值，返回的是TRUE or FALSE
@@ -290,13 +266,8 @@ between(lowerBound, upperBound)
 |  Bob|                      false|
 +-----+---------------------------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
+条件过滤
+jdbcDF.filter(jdbcDF.DeviceInfo.contains('iPhone')).select().show()
 
 2、-------- 增、改 --------
 — 2.1 新建数据 —
