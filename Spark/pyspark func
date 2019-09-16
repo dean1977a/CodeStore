@@ -184,6 +184,20 @@ withReplacement = True or False代表是否有放回。
 fraction = x, where x = .5，代表抽取百分比
 
 
+根据key进行降采样
+def downSampleBy(df, key):
+    dataSize = df.count()
+    while dataSize >1000000:
+        negativeRatio = 0.1
+        if   dataSize > 10000000:
+            positiveRatio = 0.01
+        else:
+            positiveRatio = 0.1
+        df = df.sampleBy(key, fractions={0: positiveRatio, 1: negativeRatio}, seed=42)
+        print("after down sampling the data size is ", df.count())
+    print("there is no need to downsampling")
+    return df
+
 
 — 1.5 按条件筛选when / between —
 when(condition, value1).otherwise(value2)联合使用：
