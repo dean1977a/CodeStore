@@ -67,59 +67,39 @@ show函数内可用int类型指定要打印的行数：
 df.show()
 df.show(30)
 
-    1
-    2
-
 以树的形式打印概要
 
 df.printSchema()
-
-    1
 
 获取头几行到本地：
 
 list = df.head(3)   # Example: [Row(a=1, b=1), Row(a=2, b=2), ... ...]
 list = df.take(5)   # Example: [Row(a=1, b=1), Row(a=2, b=2), ... ...]
 
-    1
-    2
-
 查询总行数：
 
  int_num = df.count()
 
-    1
-    2
 
 取别名
 
 df.select(df.age.alias('age_value'),'name')
-
-    1
 
 查询某列为null的行：
 
 from pyspark.sql.functions import isnull
 df = df.filter(isnull("col_a"))
 
-    1
-    2
-
 输出list类型，list中每个元素是Row类：
 
 list = df.collect()
-
-    1
 
 注：此方法将所有数据全部导入到本地，返回一个Array对象
 查询概况
 
 df.describe().show()
 
-    1
-
 以及查询类型，之前是type，现在是df.printSchema()
-
 root
  |-- user_pin: string (nullable = true)
  |-- a: string (nullable = true)
@@ -129,13 +109,10 @@ root
  |-- e: string (nullable = true)
 ...
 
-
-
 如上图所示，只是打印出来。
 去重set操作
 
 data.select('columns').distinct().show()
-
 
 跟py中的set一样，可以distinct()一下去重，同时也可以.count()计算剩余个数
 随机抽样
@@ -145,8 +122,6 @@ data.select('columns').distinct().show()
 HIVE里面查数随机
 
 sql = "select * from data order by rand()  limit 2000"
-
-    1
 
 pyspark之中
 
@@ -159,7 +134,6 @@ sample = result.sample(False,0.5,0) # randomly select 50% of lines
 r = Row(age=11, name='Alice')
 print r.columns    #  ['age', 'name']
 
-
 选择一列或多列：select
 
 df["age"]
@@ -169,19 +143,14 @@ df.select(df[‘name’], df[‘age’]+1)
 df.select(df.a, df.b, df.c)    # 选择a、b、c三列
 df.select(df["a"], df["b"], df["c"])    # 选择a、b、c三列
 
-
-
 重载的select方法：
 
 jdbcDF.select(jdbcDF( "id" ), jdbcDF( "id") + 1 ).show( false)
-
 
 会同时显示id列 + id + 1列
 还可以用where按条件选择
 
 jdbcDF .where("id = 1 or c1 = 'b'" ).show()
-
-
 
 — 1.3 排序 —
 
@@ -200,19 +169,6 @@ Output:
 +-------+----------+------+-----+----------+-------------+--------------------------+--------------+------------------+------------------+------------------+--------+
 only showing top 5 rows
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-
 按指定字段排序。加个-表示降序排序
 — 1.4 抽样 —
 
@@ -224,16 +180,12 @@ t1.count(),t2.count()
 Output:
 (109812, 109745)
 
-    1
-    2
-    3
-    4
-    5
-
 withReplacement = True or False代表是否有放回。
 fraction = x, where x = .5，代表抽取百分比
-— 1.5 按条件筛选when / between —
 
+
+
+— 1.5 按条件筛选when / between —
 when(condition, value1).otherwise(value2)联合使用：
 那么：当满足条件condition的指赋值为values1,不满足条件的则赋值为values2.
 otherwise表示，不满足条件的情况下，应该赋值为啥。
@@ -266,6 +218,7 @@ between(lowerBound, upperBound)
 |  Bob|                      false|
 +-----+---------------------------+
 
+
 条件过滤
 jdbcDF.filter(jdbcDF.DeviceInfo.contains('iPhone')).select().show()
 
@@ -276,7 +229,6 @@ jdbcDF.filter(jdbcDF.DeviceInfo.contains('iPhone')).select().show()
 
 sqlContext.createDataFrame(pd.dataframe())
 
-    1
 
 是把pandas的dataframe转化为spark.dataframe格式，所以可以作为两者的格式转化
 
@@ -286,12 +238,6 @@ x = ['x1','x2']
 y = ['y1','y2']
 new_df = sc.parallelize([row(x[i], y[i]) for i in range(2)]).toDF()
 
-    1
-    2
-    3
-    4
-    5
-
 Row代表的是该数据集的列名。
 — 2.2 新增数据列 withColumn—
 
@@ -299,7 +245,6 @@ withColumn是通过添加或替换与现有列有相同的名字的列，返回�
 
 result3.withColumn('label', 0)
 
-    1
 
 或者案例
 
@@ -316,19 +261,6 @@ Output:
 +--------+------------+
 only showing top 5 rows
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-
 **报错：**AssertionError: col should be Column，一定要指定某现有列
 
 有两种方式可以实现：
@@ -337,8 +269,6 @@ only showing top 5 rows
 from pyspark.sql import functions
 result3 = result3.withColumn('label',  functions.lit(0))
 
-    1
-    2
 
 但是！！ 如何新增一个特别List??(参考：王强的知乎回复)
 python中的list不能直接添加到dataframe中，需要先将list转为新的dataframe,然后新的dataframe和老的dataframe进行join操作, 下面的例子会先新建一个dataframe，然后将list转为dataframe，然后将两者join起来。
@@ -376,38 +306,7 @@ join_df.show()
 |  3|  B|-23.0|  1|  1|  tom|
 +---+---+-----+---+---+-----+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-    13
-    14
-    15
-    16
-    17
-    18
-    19
-    20
-    21
-    22
-    23
-    24
-    25
-    26
-    27
-    28
-    29
-    30
-    31
-    32
+
 
 #####**坑啊！！！**其中，monotonically_increasing_id()生成的ID保证是单调递增和唯一的，但不是连续的。
 所以，有可能，单调到1-140000，到了第144848个，就变成一长串：8845648744563，所以千万要注意！！
@@ -415,25 +314,21 @@ join_df.show()
 
 result3 = result3.withColumn('label',  df.result*0 )
 
-    1
 
 修改原有df[“xx”]列的所有值：
 
 df = df.withColumn(“xx”, 1)
 
-    1
 
 修改列的类型（类型投射）：
 
 df = df.withColumn("year2", df["year1"].cast("Int"))
 
-    1
+
 
 修改列名
 
 jdbcDF.withColumnRenamed( "id" , "idx" )
-
-    1
 
 — 2.3 过滤数据—
 
@@ -442,8 +337,6 @@ jdbcDF.withColumnRenamed( "id" , "idx" )
 df = df.filter(df['age']>21)
 df = df.where(df['age']>21)
 
-    1
-    2
 
 多个条件jdbcDF .filter(“id = 1 or c1 = ‘b’” ).show()
 
@@ -453,9 +346,6 @@ from pyspark.sql.functions import isnan, isnull
 df = df.filter(isnull("a"))  # 把a列里面数据为null的筛选出来（代表python的None类型）
 df = df.filter(isnan("a"))  # 把a列里面数据为nan的筛选出来（Not a Number，非数字数据）
 
-    1
-    2
-    3
 
 3、-------- 合并 join / union --------
 3.1 横向拼接rbind
@@ -463,8 +353,6 @@ df = df.filter(isnan("a"))  # 把a列里面数据为nan的筛选出来（Not a N
 result3 = result1.union(result2)
 jdbcDF.unionALL(jdbcDF.limit(1)) # unionALL
 
-    1
-    2
 
 — 3.2 Join根据条件 —
 单字段Join
@@ -473,7 +361,6 @@ jdbcDF.unionALL(jdbcDF.limit(1)) # unionALL
 
  df_join = df_left.join(df_right, df_left.key == df_right.key, "inner")
 
-    1
 
 其中，方法可以为：inner, outer, left_outer, right_outer, leftsemi.
 其中注意，一般需要改为：left_outer
@@ -481,13 +368,10 @@ jdbcDF.unionALL(jdbcDF.limit(1)) # unionALL
 
 joinDF1.join(joinDF2, Seq("id", "name")）
 
-    1
 
 混合字段
 
 joinDF1.join(joinDF2 , joinDF1("id" ) === joinDF2( "t1_id"))
-
-    1
 
 跟pandas 里面的left_on,right_on
 — 3.2 求并集、交集 —
@@ -507,18 +391,6 @@ sentenceDataFrame1 = spark.createDataFrame((
       (4, "f8934y")
     )).toDF("label", "sentence")
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
 
 # 差集
 newDF = sentenceDataFrame1.select("sentence").subtract(sentenceDataFrame.select("sentence"))
@@ -530,15 +402,6 @@ newDF.show()
 |  f8934y|
 +--------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
 
 # 交集
 newDF = sentenceDataFrame1.select("sentence").intersect(sentenceDataFrame.select("sentence"))
@@ -551,16 +414,6 @@ newDF.show()
 |    2143|
 +--------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
 
 # 并集
 newDF = sentenceDataFrame1.select("sentence").union(sentenceDataFrame.select("sentence"))
@@ -577,21 +430,6 @@ newDF.show()
 |    rfds|
 +--------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-    13
-    14
-    15
 
 # 并集 + 去重
 newDF = sentenceDataFrame1.select("sentence").union(sentenceDataFrame.select("sentence")).distinct()
@@ -606,18 +444,6 @@ newDF.show()
 |  f8934y|
 +--------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
 
 — 3.3 分割：行转列 —
 
@@ -634,7 +460,6 @@ jdbcDF.explode( "c3" , "c3_" ){time: String => time.split( " " )}
 
 jdbcDF.stat.freqItems(Seq ("c1") , 0.3).show()
 
-    1
 
 根据c4字段，统计该字段值出现频率在30%以上的内容
 — 4.2 分组统计—
@@ -654,19 +479,6 @@ Output:
 |     26-35|50752|168835|
 +----------+-----+------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-    13
 
 groupBy方法整合：
 
@@ -684,25 +496,11 @@ Output:
 |18-25|9169.663606261289|
 +-----+-----------------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-    13
 
 另外一些demo：
 
 df['x1'].groupby(df['x2']).count().reset_index(name='x1')
 
-    1
 
 分组汇总
 
@@ -720,27 +518,11 @@ Output:
 |18-25| 99660|
 +-----+------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-    13
 
 应用多个函数：
 
 from pyspark.sql import functions
 df.groupBy(“A”).agg(functions.avg(“B”), functions.min(“B”), functions.max(“B”)).show()
-
-    1
-    2
 
 整合后GroupedData类型可用的方法（均返回DataFrame类型）：
 avg(*cols)     ——   计算每组中一列或多列的平均值
@@ -750,27 +532,17 @@ mean(*cols)  ——  计算每组中一列或多列的平均值
 min(*cols)     ——  计算每组中一列或多列的最小值
 sum(*cols)    ——   计算每组中一列或多列的总和
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-
 — 4.3 apply 函数 —
 
 将df的每一列应用函数f：
 
 df.foreach(f) 或者 df.rdd.foreach(f)
 
-    1
 
 将df的每一块应用函数f：
 
 df.foreachPartition(f) 或者 df.rdd.foreachPartition(f)
 
-    1
 
 ---- 4.4 【Map和Reduce应用】返回类型seqRDDs ----
 
@@ -785,13 +557,6 @@ Output:
  (Row(User_ID=1000001), 1),
  (Row(User_ID=1000002), 1)]
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
 
 其中map在spark2.0就移除了，所以只能由rdd.调用。
 
@@ -803,13 +568,6 @@ print(y.collect())
 [1, 2, 3]
 [(1, 1), (2, 4), (3, 9)]
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
 
 还有一种方式mapPartitions：
 
@@ -818,12 +576,6 @@ def _map_to_pandas(rdds):
     return [pd.DataFrame(list(rdds))]
 
 data.rdd.mapPartitions(_map_to_pandas).collect()
-
-    1
-    2
-    3
-    4
-    5
 
 返回的是list。
 
@@ -845,22 +597,6 @@ udfday = udf(today, StringType())
 # 使用
 df.withColumn('day', udfday(df.day))
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-    13
-    14
-    15
-    16
 
 有点类似apply,定义一个 udf 方法, 用来返回今天的日期(yyyy-MM-dd):
 -------- 5、删除 --------
@@ -868,17 +604,12 @@ df.withColumn('day', udfday(df.day))
 df.drop('age').collect()
 df.drop(df.age).collect()
 
-    1
-    2
 
 dropna函数：
 
 df = df.na.drop()  # 扔掉任何列包含na的行
 df = df.dropna(subset=['col_name1', 'col_name2'])  # 扔掉col1或col2中任一一列包含na的行
 
-    1
-    2
-    3
 
 ex:
 
@@ -886,9 +617,6 @@ train.dropna().count()
 Output:
 166821
 
-    1
-    2
-    3
 
 填充NA包括fillna
 
@@ -902,16 +630,6 @@ Output:
 +-------+----------+------+----+----------+-------------+--------------------------+--------------+------------------+------------------+------------------+--------+
 only showing top 2 rows
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-
 -------- 6、去重 --------
 6.1 distinct：返回一个不包含重复记录的DataFrame
 
@@ -920,13 +638,11 @@ only showing top 2 rows
 
 jdbcDF.distinct()
 
-    1
 
 6.2 dropDuplicates：根据指定字段去重
 
 根据指定字段去重。类似于select distinct a, b操作
 示例：
-
 
 train.select('Age','Gender').dropDuplicates().show()
 Output:
@@ -949,27 +665,6 @@ Output:
 | 0-17|     M|
 +-----+------+
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-    12
-    13
-    14
-    15
-    16
-    17
-    18
-    19
-    20
-    21
 
 -------- 7、 格式转换 --------
 pandas-spark.dataframe互转
@@ -979,8 +674,6 @@ Pandas和Spark的DataFrame两者互相转换：
 pandas_df = spark_df.toPandas()	
 spark_df = sqlContext.createDataFrame(pandas_df)
 
-    1
-    2
 
 转化为pandas，但是该数据要读入内存，如果数据量大的话，很难跑得动
 
@@ -998,8 +691,6 @@ spark_df = sqlContext.createDataFrame(pandas_df)
 rdd_df = df.rdd	
 df = rdd_df.toDF()
 
-    1
-    2
 
 -------- 8、SQL操作 --------
 
@@ -1007,19 +698,12 @@ DataFrame注册成SQL的表：
 
 df.createOrReplaceTempView("TBL1")
 
-    1
-
 进行SQL查询（返回DataFrame）：
 
 conf = SparkConf()
 ss = SparkSession.builder.appName("APP_NAME").config(conf=conf).getOrCreate()
 
 df = ss.sql(“SELECT name, age FROM TBL1 WHERE age >= 13 AND age <= 19″)
-
-    1
-    2
-    3
-    4
 
 -------- 9、读写csv --------
 
@@ -1030,17 +714,11 @@ sqlContext = SQLContext(sc)
 df = sqlContext.load(source="com.databricks.spark.csv", header="true", path = "cars.csv")
 df.select("year", "model").save("newcars.csv", "com.databricks.spark.csv",header="true")
 
-    1
-    2
-    3
-    4
 
 其中，header代表是否显示表头。
 其中主函数：
 
 save(path=None, format=None, mode=None, partitionBy=None, **options)[source]
-
-    1
 
 Parameters:
 
