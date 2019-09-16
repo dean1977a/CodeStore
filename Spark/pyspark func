@@ -63,10 +63,11 @@
 — 1.1 行元素查询操作 —
 像SQL那样打印列表前20元素
 
-show函数内可用int类型指定要打印的行数：
+show函数内可用int类型指定要打印的行数,truncate显示全部数据：
 
 df.show()
 df.show(30)
+df.show(1，truncate=False)
 
 以树的形式打印概要
 
