@@ -22,6 +22,7 @@
             --- 1.4 抽样 ---
             --- 1.5 按条件筛选when / between ---
                     **条件过滤**
+            --- 1.6 剔除极端值 ---  
     2、-------- 增、改 --------
             --- 2.1 新建数据 ---
             --- 2.2 新增数据列 withColumn---
@@ -235,6 +236,17 @@ between(lowerBound, upperBound)
 
 条件过滤
 jdbcDF.filter(jdbcDF.DeviceInfo.contains('iPhone')).select().show()
+
+1.6、-------- 剔除极端值 --------
+def outlierProcessing(df,col):
+    quantiles = df.approxQuantile(col, [0.25, 0.75], 0.05)
+    # 计算4分位距
+    irq = quantiles[1] - quantiles[0]
+    min=quantiles[0]-1.5*irq
+    max=quantiles[1]+1.5*irq
+    df = df.filter(df[col]<=max)
+    df = df.filter(df[col]>=min)
+    return df
 
 2、-------- 增、改 --------
 — 2.1 新建数据 —
