@@ -204,6 +204,7 @@ def downSampleBy(df, key):
 
 #划分类别变量和数值变量
 #通过手工添加special_num_list,special_cat_list排除异常变量，noNeedToSplitList指定不需要进行划分的变量
+#通过计算每个列中的unique值数量判断是否为类别变量
 def featureTypeSplit(df, key, specialNumList=[], specialCatList=[],noNeedToSplitList=[]):
     df = downSampleBy(df, key)
     categoricalVar = []
@@ -225,8 +226,8 @@ def featureTypeSplit(df, key, specialNumList=[], specialCatList=[],noNeedToSplit
             numericalVar.append(colName)
     return categoricalVar,numericalVar
 
-#split categorical, discrete and numerical features切分类别变量和数值变量
-#通过手工添加special_num_list,special_cat_list指定特别变量
+
+#简化版，减少计算量
 def featureTypeSplit(df, specialNumList=[], specialCatList=[],noNeedToSplitList=[]):
     categoricalVar = []
     numericalVar = []
