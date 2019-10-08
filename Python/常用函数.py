@@ -278,6 +278,13 @@ df = df_raw[df_raw.make.isin(models)].copy()
 #等同于
 df = df_raw[df_raw['make'].isin(models)].copy()
 
+# 2.3.1筛选大于指定长度的列        
+#对该列进行强制的字符类型转换
+df["token"] = df["token"].astype(str)
+#筛选df这个数据集下，token这个字段下面的value字符串长度大于20的
+df= df[df['token'].str.len() >20]        
+        
+        
 # 2.4查找异常值
 df['sta'] = (df['price']-df['price'].mean())/df['price'].mean()
 df[df['sta'].abs > 3]        
