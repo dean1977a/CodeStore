@@ -186,7 +186,7 @@ Output:
 withReplacement = True or False代表是否有放回。
 fraction = x, where x = .5，代表抽取百分比
 
-
+— 1.5 划分连续型特征和离散型特征 —
 #根据key进行降采样
 def downSampleBy(df, key):
     dataSize = df.count()
@@ -201,52 +201,67 @@ def downSampleBy(df, key):
     print("there is no need to downsampling")
     return df
 
-
-#划分类别变量和数值变量
-#通过手工添加special_num_list,special_cat_list排除异常变量，noNeedToSplitList指定不需要进行划分的变量
-#通过计算每个列中的unique值数量判断是否为类别变量
+#split categorical, discrete and numerical features  切分类别变量和数值变量
+#通过手工添加special_num_list,special_cat_list排除异常变量
 def featureTypeSplit(df, key, specialNumList=[], specialCatList=[],noNeedToSplitList=[]):
     df = downSampleBy(df, key)
-    categoricalVar = []
-    numericalVar = []
+    catVarList = []
+    numVarList = []
     for colName,colType in dict(df.dtypes).items():
         if colName in noNeedToSplitList:
             continue
         elif colName in specialCatList:     # if you want to add some special cases
-            categoricalVar.append(colName)
+            print("catVarList add ", colName)
+            catVarList.append(colName)
         elif colName in specialNumList:     # if you want to add some special cases
-            numericalVar.append(colName)
+            print("numVarList add ", colName)
+            numVarList.append(colName)
         elif colType == 'string':
-            categoricalVar.append(colName)
+            print("catVarList add ", colName)
+            catVarList.append(colName)
         elif colType == 'boolean':
-            categoricalVar.append(colName)
+            print("catVarList add ", colName)
+            catVarList.append(colName)
         elif colType == 'binary':
-            categoricalVar.append(colName)
+            print("catVarList add ", colName)
+            catVarList.append(colName)
+        elif df.agg(countDistinct(df.colName)).collect()[0][0] < 1500 :
+            print("catVarList add ", colName)
+            catVarList.append(colName)
         else:
-            numericalVar.append(colName)
-    return categoricalVar,numericalVar
+            print("numVarList add ", colName)
+            numVarList.append(colName)
+    return catVarList,numVarList
 
 
 #简化版，减少计算量
+#split categorical, discrete and numerical features切分类别变量和数值变量
+#通过手工添加special_num_list,special_cat_list指定特别变量
 def featureTypeSplit(df, specialNumList=[], specialCatList=[],noNeedToSplitList=[]):
-    categoricalVar = []
-    numericalVar = []
+    catVarList = []
+    numVarList = []
     for colName,colType in dict(df.dtypes).items():
         if colName in noNeedToSplitList:
             continue
         elif colName in specialCatList:     # if you want to add some special cases
-            categoricalVar.append(colName)
+            print("catVarList add ", colName)
+            catVarList.append(colName)
         elif colName in specialNumList:     # if you want to add some special cases
-            numericalVar.append(colName)
+            print("numVarList add ", colName)
+            numVarList.append(colName)
         elif colType == 'string':
-            categoricalVar.append(colName)
+            print("catVarList add ", colName)
+            catVarList.append(colName)
         elif colType == 'boolean':
-            categoricalVar.append(colName)
+            print("catVarList add ", colName)
+            catVarList.append(colName)
         elif colType == 'binary':
-            categoricalVar.append(colName)
+            print("catVarList add ", colName)
+            catVarList.append(colName)
         else:
-            numericalVar.append(colName)
-    return categoricalVar,numericalVar
+            print("numVarList add ", colName)
+            numVarList.append(colName)
+    return catVarList,numVarList
     
 — 1.6 按条件筛选when / between —
 when(condition, value1).otherwise(value2)联合使用：
