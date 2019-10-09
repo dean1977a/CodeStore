@@ -57,6 +57,7 @@
                     转化为RDD
     -------- 8、SQL操作 --------
     -------- 9、读写csv --------
+    ------- 10、pipeline --------
         延伸一：去除两个表重复的内容
         参考文献
 
@@ -831,6 +832,69 @@ Parameters:
     partitionBy – names of partitioning columns
 
     options – all other string options
+    
+    
+------- 10、pipeline --------
+CREATE TABLE adult (
+  age DOUBLE,
+  workclass STRING,
+  fnlwgt DOUBLE,
+  education STRING,
+  education_num DOUBLE,
+  marital_status STRING,
+  occupation STRING,
+  relationship STRING,
+  race STRING,
+  sex STRING,
+  capital_gain DOUBLE,
+  capital_loss DOUBLE,
+  hours_per_week DOUBLE,
+  native_country STRING,
+  income STRING)
+USING CSV
+OPTIONS (path "/databricks-datasets/adult/adult.data", header "true")
+
+dataset = spark.table("adult")
+
+# Use One-Hot Encoding to convert all categorical variables into binary vectors.
+
+from pyspark.ml import Pipeline
+from pyspark.ml.feature import OneHotEncoderEstimator, StringIndexer, VectorAssembler
+categoricalColumns = ["workclass", "education", "marital_status", "occupation", "relationship", "race", "sex", "native_country"]
+
+stages = [] # stages in our Pipeline
+for categoricalCol in categoricalColumns:
+    # Category Indexing with StringIndexer
+    stringIndexer = StringIndexer(inputCol=categoricalCol, outputCol=categoricalCol + "Index")
+    # Use OneHotEncoder to convert categorical variables into binary SparseVectors
+    # encoder = OneHotEncoderEstimator(inputCol=categoricalCol + "Index", outputCol=categoricalCol + "classVec")
+    encoder = OneHotEncoderEstimator(inputCols=[stringIndexer.getOutputCol()], outputCols=[categoricalCol + "classVec"])
+    # Add stages.  These are not run here, but will run all at once later on.
+    stages += [stringIndexer, encoder]
+
+# Convert label into label indices using the StringIndexer
+label_stringIdx = StringIndexer(inputCol="income", outputCol="label")
+stages += [label_stringIdx]
+
+# Transform all features into a vector using VectorAssembler
+numericCols = ["age", "fnlwgt", "education_num", "capital_gain", "capital_loss", "hours_per_week"]
+assemblerInputs = [c + "classVec" for c in categoricalColumns] + numericCols
+assembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
+stages += [assembler]
+
+# Run the stages as a Pipeline. This puts the data through all of the feature transformations in a single call.
+
+partialPipeline = Pipeline().setStages(stages)
+pipelineModel = partialPipeline.fit(dataset)
+preppedDataDF = pipelineModel.transform(dataset)
+
+# Fit logistic regression model
+
+from pyspark.ml.classification import LogisticRegression
+lrModel = LogisticRegression().fit(preppedDataDF
+
+# ROC for data
+display(lrModel, preppedDataDF, "ROC")
 
 延伸一：去除两个表重复的内容
 
