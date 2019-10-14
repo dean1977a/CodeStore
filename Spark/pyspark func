@@ -550,6 +550,22 @@ jdbcDF.explode( "c3" , "c3_" ){time: String => time.split( " " )}
 
 jdbcDF.stat.freqItems(Seq ("c1") , 0.3).show()
 
+#统计card1列数值出现的次数
+jdbcDF.select('card1').rdd.countByKey().items()
+返回：dict_items([(13926, 43), (2755, 683), (4663, 1108)])
+
+#统计card1列数值出现的次数
+jdbcDF.select('card1').rdd.countByValue().items()
+dict_items([(Row(card1=13926), 43), (Row(card1=2755), 683), (Row(card1=4663), 1108)])
+
+
+#map reduce方法 {值：统计次数}组合成为一个字典
+col_encoded = train.select('card1').rdd.map(lambda x:(x,1)) \
+                                .reduceByKey(lambda x,y:x+y) \
+                                .map(lambda x:{x[0][0]:x[1]})
+                                
+col_encoded.collect()[0]
+返回：{2755: 683}
 
 根据c4字段，统计该字段值出现频率在30%以上的内容
 — 4.2 分组统计—
@@ -689,6 +705,9 @@ df.withColumn('day', udfday(df.day))
 
 
 有点类似apply,定义一个 udf 方法, 用来返回今天的日期(yyyy-MM-dd):
+
+
+                                
 -------- 5、删除 --------
 
 df.drop('age').collect()
