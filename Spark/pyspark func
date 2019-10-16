@@ -349,6 +349,9 @@ withColumn是通过添加或替换与现有列有相同的名字的列，返回�
 
 result3.withColumn('label', 0)
 
+或者
+
+df.withColumn("Family_Size",col('SibSp')+col('Parch'))
 
 或者案例
 
