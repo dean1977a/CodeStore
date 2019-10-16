@@ -23,7 +23,10 @@
             ----1.5 划分类别变量和数值变量---
             --- 1.6 按条件筛选when / between ---
                     **条件过滤**
-            --- 1.6 剔除极端值 ---  
+            --- 1.7 剔除极端值 ---
+            --- 1.8 正则表达式 ---
+            --- 1.9 替换 ---
+            --- 1.10 手工填补数值 ---
     2、-------- 增、改 --------
             --- 2.1 新建数据 ---
             --- 2.2 新增数据列 withColumn---
@@ -301,7 +304,7 @@ between(lowerBound, upperBound)
 条件过滤
 jdbcDF.filter(jdbcDF.DeviceInfo.contains('iPhone')).select().show()
 
-1.6、-------- 剔除极端值 --------
+1.7、-------- 剔除极端值 --------
 def outlierProcessing(df,col):
     quantiles = df.approxQuantile(col, [0.25, 0.75], 0.05)
     # 计算4分位距
@@ -311,6 +314,17 @@ def outlierProcessing(df,col):
     df = df.filter(df[col]<=max)
     df = df.filter(df[col]>=min)
     return df
+    
+1.8、 ------- 正则表达式 ---------
+df = df.withColumn("Initial",regexp_extract(col("Name"),"([A-Za-z]+)\.",1))
+
+1.9  ------- 替换 --------------
+df = df.replace(['Mlle','Mme', 'Ms', 'Dr','Major','Lady','Countess','Jonkheer','Col','Rev','Capt','Sir','Don'],
+               ['Miss','Miss','Miss','Mr','Mr',  'Mrs',  'Mrs',  'Other',  'Other','Other','Mr','Mr','Mr'])
+
+1.10 -------- 手工填补数值 ----------
+df = df.withColumn("Age",when((df["Initial"] == "Miss") & (df["Age"].isNull()), 22).otherwise(df["Age"]))
+
 
 2、-------- 增、改 --------
 — 2.1 新建数据 —
