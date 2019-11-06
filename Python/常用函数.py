@@ -1657,4 +1657,34 @@ LR_RandSearch = RandomSearch(X_train_sc,y_train_sc,model,hyperparameters)
 Prediction_LR = LR_RandSearch.BestModelPridict(X_test_sc)
         
 
-   
+        
+        
+################# 皮尔逊相关系数 挑选变量（在Pipeline中实现）######################################
+from sklearn.base import TransformerMixin, BaseEstimator
+
+class CustomCorrelationChooser(TransformerMixin, BaseEstimator):
+    def __init__(self, response, cols_to_keep =[], threshold=None):
+        # 保存target
+        self.response = response
+        # 保存阈值
+        self.threshold = threshold
+        # 初始化一个变量用于保存特征名
+        self.cols_to_keep = cols_to_keep
+        
+    def transform(self, x):
+        return x[self.cols_to_keep]
+    
+    def fit(self, x, *_):
+        df = pd.concat([x, self.response], axis=1)
+        self.cols_to_keep = df.columns[df.corr()[df.columns[-1]].abs()>self.threshold]
+        self.cols_to_keep = [c for c in self.cols_to_keep if c in x.columns]
+        return self
+    
+    
+# 调用方法
+ccc = CustomCorrelationChooser(threshold=.2, response=y)
+ccc.fit(x)
+# 查看保留的变量
+ccc.cols_to_keep
+# 查看转换的变量
+ccc.transform(x).head()
