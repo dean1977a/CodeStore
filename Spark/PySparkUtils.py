@@ -62,13 +62,14 @@ def featureTypeSplit(df, key, specialNumList=[], specialCatList=[],noNeedToSplit
         elif colType == 'binary':
             print("catVarList add ", colName)
             catVarList.append(colName)
-        elif df.agg(countDistinct(df.colName)).collect()[0][0] < 1500 :
+        elif df.agg(F.countDistinct(df.colName)).collect()[0][0] < 1500 :
             print("catVarList add ", colName)
             catVarList.append(colName)
         else:
             print("numVarList add ", colName)
             numVarList.append(colName)
     return catVarList,numVarList
+
 
 categoricalVar,disNumVar,numericalVar = featureTypeSplit(train,key='isFraud',specialNumList=[],specialCatList=[])
 
