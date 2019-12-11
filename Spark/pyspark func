@@ -646,6 +646,11 @@ df.withColumn('day', udfday(df.day))
 有点类似apply,定义一个 udf 方法, 用来返回今天的日期(yyyy-MM-dd):
 
 
+def myfunc(val):
+    pass
+df = df.withColumn('col_name', F.udf(myfunc, returnType=DoubleType())('col_name')
+
+
                                 
 -------- 5、删除 --------
 
