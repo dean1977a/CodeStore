@@ -1,4 +1,20 @@
 1.显示列数量
-SELECT  count(*)  FROM  information_schema.COLUMNS
-WHERE
-TABLE_NAME = 'tag_type';
+SELECT  count(*)  FROM  information_schema.COLUMNS   WHERE  TABLE_NAME = 'tag_type';
+
+2.查询表的大小
+select pg_size_pretty(pg_relation_size('table_name'));
+
+3.统计各数据库占用的磁盘大小
+SELECT d.datname AS Name,  pg_catalog.pg_get_userbyid(d.datdba) AS Owner,
+    CASE WHEN pg_catalog.has_database_privilege(d.datname, 'CONNECT')
+        THEN pg_catalog.pg_size_pretty(pg_catalog.pg_database_size(d.datname))
+        ELSE 'No Access'
+    END AS SIZE
+FROM pg_catalog.pg_database d
+    ORDER BY
+    CASE WHEN pg_catalog.has_database_privilege(d.datname, 'CONNECT')
+        THEN pg_catalog.pg_database_size(d.datname)
+        ELSE NULL
+    END DESC -- nulls first
+    LIMIT 20
+
