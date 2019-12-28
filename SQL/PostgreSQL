@@ -1,0 +1,4 @@
+1.显示列数量
+SELECT  count(*)  FROM  information_schema.COLUMNS
+WHERE
+TABLE_NAME = 'tag_type';
