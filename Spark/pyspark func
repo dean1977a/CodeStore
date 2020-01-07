@@ -17,6 +17,8 @@
                     **选择一列或多列：select**
                     **重载的select方法：**
                     **还可以用where按条件选择**
+                    **将1列扩展为N列**
+                    **使用字典替换列中的元素**
                     
             --- 1.3 排序 ---
             --- 1.4 抽样 ---
@@ -175,6 +177,20 @@ ndim = 2
 import pyspark.sql.functions as f
 for d in range(ndim):
     df = df.withColumn('dim{}'.format(d+1), f.split('dim', 'x')[d])
+    
+    
+使用字典替换列中的元素    
+from itertools import chain
+from pyspark.sql.functions import create_map, lit
+
+simple_dict = {'india':'ind', 'usa':'us', 'japan':'jpn', 'uruguay':'urg'}
+
+mapping_expr = create_map([lit(x) for x in chain(*simple_dict.items())])
+
+df = df.withColumn('col1_map', mapping_expr[df['col1']])\
+       .withColumn('col2_map', mapping_expr[df['col2']])
+
+df.show(truncate=False)
 
 
 — 1.3 排序 —
