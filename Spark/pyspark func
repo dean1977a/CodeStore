@@ -50,6 +50,8 @@
             --- 4.2 分组统计---
                     交叉分析
                     **groupBy方法整合：**
+                    **window函数**
+                    **over函数**
             --- 4.3 apply 函数 ---
             ---- 4.4 【Map和Reduce应用】返回类型seqRDDs ----
     -------- 5、删除 --------
@@ -673,6 +675,31 @@ max(*cols)    ——   计算每组中一列或多列的最大值
 mean(*cols)  ——  计算每组中一列或多列的平均值
 min(*cols)     ——  计算每组中一列或多列的最小值
 sum(*cols)    ——   计算每组中一列或多列的总和
+
+
+window函数
+
+from pyspark.sql.window import Window
+import pyspark.sql.functions as func
+from pyspark.sql.functions import lit
+
+dfu = df.withColumn('user', lit('tmoore'))
+
+df_lag = dfu.withColumn('prev_day_price',
+                        func.lag(dfu['price'])
+                                 .over(Window.partitionBy("user")))
+
+result = df_lag.withColumn('daily_return', 
+          (df_lag['price'] - df_lag['prev_day_price']) / df_lag['price'] )
+
+>>> result.show()
++---+-----+-------+--------------+--------------------+
+|day|price|   user|prev_day_price|        daily_return|
++---+-----+-------+--------------+--------------------+
+|  1| 33.3| tmoore|          null|                null|
+|  2| 31.1| tmoore|          33.3|-0.07073954983922816|
+|  3| 51.2| tmoore|          31.1|         0.392578125|
+|  4| 21.3| tmoore|          51.2|  -1.403755868544601|
 
 — 4.3 apply 函数 —
 
