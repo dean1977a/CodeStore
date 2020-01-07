@@ -179,7 +179,8 @@ for d in range(ndim):
     df = df.withColumn('dim{}'.format(d+1), f.split('dim', 'x')[d])
     
     
-使用字典替换列中的元素    
+使用字典替换列中的元素  
+方法1
 from itertools import chain
 from pyspark.sql.functions import create_map, lit
 
@@ -191,6 +192,67 @@ df = df.withColumn('col1_map', mapping_expr[df['col1']])\
        .withColumn('col2_map', mapping_expr[df['col2']])
 
 df.show(truncate=False)
+
+方法2
+from itertools import chain
+from pyspark.sql.functions import col, create_map, lit, when, isnull
+from pyspark.sql.column import Column
+
+df = spark.createDataFrame([
+    ('Tablet', ), ('Phone', ),  ('PC', ), ('Other', ), (None, )
+], ["device_type"])
+
+deviceDict = {'Tablet':'Mobile','Phone':'Mobile','PC':'Desktop'}
+
+df.show()
++-----------+
+|device_type|
++-----------+
+|     Tablet|
+|      Phone|
+|         PC|
+|      Other|
+|       null|
++-----------+
+
+#Here is the definition of recode
+def recode(col_name, map_dict, default=None):
+    if not isinstance(col, Column):
+        col_name = col(col_name)
+    mapping_expr = create_map([lit(x) for x in chain(*map_dict.items())])
+    if default is None:
+        return  mapping_expr.getItem(col_name)
+    else:
+        return when(~isnull(mapping_expr.getItem(col_name)), mapping_expr.getItem(col_name)).otherwise(default)
+
+
+#Creating a column without a default gives null/None in all unmatched values.
+df.withColumn("device_type", recode('device_type', deviceDict)).show()
+
++-----------+
+|device_type|
++-----------+
+|     Mobile|
+|     Mobile|
+|    Desktop|
+|       null|
+|       null|
++-----------+
+
+#On the other hand, specifying a value for default replaces all unmatched values with this default.
+df.withColumn("device_type", recode('device_type', deviceDict, default='Other')).show()
+
++-----------+
+|device_type|
++-----------+
+|     Mobile|
+|     Mobile|
+|    Desktop|
+|      Other|
+|      Other|
++-----------+
+
+
 
 
 — 1.3 排序 —
