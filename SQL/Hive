@@ -119,6 +119,15 @@ Time taken: 0.325 seconds, Fetched: 1 row(s)
 说明: 返回日期中的天。
 举例：同上
 
+13.从其他表直接插入数据
+set hive.exec.dynamic.partition=true;
+set hive.exec.dynamic.partition.mode=nonstrict;
+
+CREATE TABLE IF NOT EXISTS sybq_etl_usr_buss_income_60002 LIKE sybq_ods_usr_buss_income_60002
+location '/user/zh2_hw_zhjtuser/SYBQ/ETL/sybq_etl_usr_buss_income_60002';
+
+insert overwrite table sybq_etl_usr_buss_income_60002 partition(month) select * from sybq_ods_usr_buss_income_60002;
+
 13.日期转小时函数: hour
 
 语法: hour   (string date) 
