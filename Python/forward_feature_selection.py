@@ -64,3 +64,11 @@ def forwardFeatureSelect(model,df,original_columns,target):
     return usefull_columns, not_usefull_columns
             
 usefull_columns, not_usefull_columns = forwardFeatureSelect(model,df,original_columns,target)
+
+# this columns were picked with forward feature selection (run previous cell)
+usefull_columns = [] 
+final_features = usefull_columns + original_columns
+print('Our usefull features found with forward feature selection are {}'.format(final_features))
+
+print('-'*50)
+print('We have selected {} features'.format(len(final_features)))
