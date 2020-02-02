@@ -920,6 +920,14 @@ Parameters:
 
     options – all other string options
     
+示例：
+inputFile = os.listdir()
+fileList = locals()
+for i in inputFile:
+    if i.endwith("csv"):
+        fileList[i.split('.')[0]] = spark.read.csv(i,inferSchema=True,header=True,encoding='gbk')
+        print(i.split('.')[0])
+
     
 ------- 10、pipeline --------
 CREATE TABLE adult (
@@ -978,7 +986,7 @@ preppedDataDF = pipelineModel.transform(dataset)
 # Fit logistic regression model
 
 from pyspark.ml.classification import LogisticRegression
-lrModel = LogisticRegression().fit(preppedDataDF
+lrModel = LogisticRegression().fit(preppedDataDF)
 
 # ROC for data
 display(lrModel, preppedDataDF, "ROC")

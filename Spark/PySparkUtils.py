@@ -358,3 +358,97 @@ def getDiffColumns(trainDF, testDF, cols, showPlots=True, threshold=0.1):
 diffDF,conDF = getDiffColumns(trainDF = train ,testDF = test ,cols = numericalVar ,showPlots=True,threshold=0.1)
 
 
+
+--------------------------------------移除低方差特征---------------------------------------------------------------------
+#https://github.com/boutrosrg/Predictive-Maintenance-In-PySpark
+def spark_remove_low_var_features(spark_df, features, threshold, remove):
+    '''
+    This function removes low-variance features from features columns in Spark DF
+    
+    INPUTS:
+    @spark_df: Spark Dataframe
+    @features: list of data features in spark_df to be tested for low-variance removal
+    @threshold: lowest accepted variance value of each feature
+    @remove: boolean variable determine if the low-variance variable should be removed or not
+    
+    OUTPUTS:
+    @spark_df: updated Spark Dataframe 
+    @low_var_features: list of low variance features 
+    @low_var_values: list of low variance values
+    '''
+        
+    # set list of low variance features
+    low_var_features = []
+    
+    # set corresponded list of low-var values
+    low_var_values = []
+    
+    # loop over data features
+    for f in features:
+        # compute standard deviation of column 'f'
+        std = float(spark_df.describe(f).filter("summary = 'stddev'").select(f).collect()[0].asDict()[f])
+        
+        # compute variance
+        var = std*std
+
+        # check if column 'f' variance is less of equal to threshold
+        if var <= threshold:
+            
+            # append low-var feature name and value to the corresponded lists
+            low_var_features.append(f)
+            low_var_values.append(var)
+            
+            print(f + ': var: ' + str(var))
+            
+            # drop column 'f' if @remove is True
+            if remove:
+                spark_df = spark_df.drop(f)
+    
+    # return Spark Dataframe, low variance features, and low variance values
+    return spark_df, low_var_features, low_var_values
+
+# remove low-variance features from data
+train_df, train_low_var_features, train_low_var_values = spark_remove_low_var_features(train_df, data_features, 0.05, False)
+
+--------------------------------------窗口平滑---------------------------------------------------------------------
+
+from pyspark.sql.window import Window
+import pyspark.sql.functions as F
+def add_rolling_avg_features(df, features, lags, idx, time):
+    '''
+    This function adds rolling average features for each asset in DF. The new features 
+    take names OLD_FEATURE+'_rollingmean_'
+    
+    INPUTS:
+    @df: Spark Dataframe
+    @features: list of data features in @df
+    @lags: list of windows sizes of rolling average method
+    @idx: column name of asset ID 
+    @time: column name of operational time
+    
+    OUTPUTS:
+    @df: Updated Spark Dataframe
+    '''
+    
+    # loop over window sizes
+    for lag_n in lags:
+        
+        # create Spark window
+        w = Window.partitionBy(idx).orderBy(time).rowsBetween(1-lag_n, 0)
+        
+        # loop over data features
+        for f in features:
+            
+            # add new column of rolling average of feature 'f'
+            df = df.withColumn(f + '_rollingmean_'+str(lag_n), F.avg(F.col(f)).over(w))
+    
+    # return DF
+    return df
+
+# set lag window to 4 cycles
+lags = [4]
+
+# add rolling average features
+train_df = add_rolling_avg_features(train_df, data_features, lags, "id", "cycle")
+
+
