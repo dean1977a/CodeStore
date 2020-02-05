@@ -945,7 +945,6 @@ df.withColumn('day', udfday(df.day))
 有点类似apply,定义一个 udf 方法, 用来返回今天的日期(yyyy-MM-dd):
 
 #使用pandas_udf进行分组计算
-#方法一GROUPED_MAP
 from pyspark.sql.functions import pandas_udf,PandasUDFType
 
 df3 = spark.createDataFrame(
@@ -980,23 +979,6 @@ df3.groupby("key").apply(g).show()
 |  b|       6.5|      -1.5|    5.0|    8.0|
 |  a|       0.0|      21.0|   21.0|  -21.0|
 +---+----------+----------+-------+-------+
-
-#方法二GROUPED_AGG
-#Grouped aggregate Panda UDF类似于Spark聚合函数。Grouped aggregate Panda UDF常常与groupBy().agg()和pyspark.sql.window一起使用。
-import numpy as np
-
-@pandas_udf(DoubleType(), functionType=PandasUDFType.GROUPED_AGG)
-def f(x, y):
-    return np.minimum(x, y).mean()
-
-df.groupBy("key").agg(f("value1", "value2").alias("avg_min")).show()
-
-+---+-------+
-|key|avg_min|
-+---+-------+
-|  b|   -1.5|
-|  a|   -0.5|
-+---+-------+
 
 
 
