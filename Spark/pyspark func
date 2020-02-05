@@ -712,6 +712,34 @@ df.foreach(f) 或者 df.rdd.foreach(f)
 
 df.foreachPartition(f) 或者 df.rdd.foreachPartition(f)
 
+from pyspark.sql.functions import pandas_udf,PandasUDFType
+
+df3 = spark.createDataFrame(
+[("a", 1, 0), ("a", -1, 42), ("b", 3, -1), ("b", 10, -2)],
+("key", "value1", "value2")
+)
+
+from pyspark.sql.types import *
+
+schema = StructType([
+    StructField("key", StringType()),
+    StructField("avg_value1", DoubleType()),
+    StructField("avg_value2", DoubleType()),
+    StructField("sum_avg", DoubleType()),
+    StructField("sub_avg", DoubleType())
+])
+
+@pandas_udf(schema, functionType=PandasUDFType.GROUPED_MAP)
+def g(df):
+    gr = df['key'].iloc[0]
+    x = df.value1.mean()
+    y = df.value2.mean()
+    w = df.value1.mean() + df.value2.mean()
+    z = df.value1.mean() - df.value2.mean()
+    return pd.DataFrame([[gr]+[x]+[y]+[w]+[z]])
+
+df3.groupby("key").apply(g).show()
+
 
 ---- 4.4 【Map和Reduce应用】返回类型seqRDDs ----
 
@@ -765,14 +793,61 @@ def today(day):
 udfday = udf(today, StringType())
 # 使用
 df.withColumn('day', udfday(df.day))
-
-
 有点类似apply,定义一个 udf 方法, 用来返回今天的日期(yyyy-MM-dd):
 
+#使用pandas_udf进行分组计算
+#方法一GROUPED_MAP
+from pyspark.sql.functions import pandas_udf,PandasUDFType
 
-def myfunc(val):
-    pass
-df = df.withColumn('col_name', F.udf(myfunc, returnType=DoubleType())('col_name')
+df3 = spark.createDataFrame(
+[("a", 1, 0), ("a", -1, 42), ("b", 3, -1), ("b", 10, -2)],
+("key", "value1", "value2")
+)
+
+from pyspark.sql.types import *
+
+schema = StructType([
+    StructField("key", StringType()),
+    StructField("avg_value1", DoubleType()),
+    StructField("avg_value2", DoubleType()),
+    StructField("sum_avg", DoubleType()),
+    StructField("sub_avg", DoubleType())
+])
+
+@pandas_udf(schema, functionType=PandasUDFType.GROUPED_MAP)
+def g(df):
+    gr = df['key'].iloc[0]
+    x = df.value1.mean()
+    y = df.value2.mean()
+    w = df.value1.mean() + df.value2.mean()
+    z = df.value1.mean() - df.value2.mean()
+    return pd.DataFrame([[gr]+[x]+[y]+[w]+[z]])
+
+df3.groupby("key").apply(g).show()
+
++---+----------+----------+-------+-------+
+|key|avg_value1|avg_value2|sum_avg|sub_avg|
++---+----------+----------+-------+-------+
+|  b|       6.5|      -1.5|    5.0|    8.0|
+|  a|       0.0|      21.0|   21.0|  -21.0|
++---+----------+----------+-------+-------+
+
+#方法二GROUPED_AGG
+import numpy as np
+
+@pandas_udf(DoubleType(), functionType=PandasUDFType.GROUPED_AGG)
+def f(x, y):
+    return np.minimum(x, y).mean()
+
+df.groupBy("key").agg(f("value1", "value2").alias("avg_min")).show()
+
++---+-------+
+|key|avg_min|
++---+-------+
+|  b|   -1.5|
+|  a|   -0.5|
++---+-------+
+
 
 
                                 
