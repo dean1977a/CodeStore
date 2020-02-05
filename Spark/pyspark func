@@ -868,72 +868,11 @@ df.withColumn('mean_v', mean_udf(df['v']).over(w)).show()
 # |  2|10.0|   6.0|
 # +---+----+------+
 
-4.5.4 快速使用Pandas_UDF
-
-需要注意的是schema变量里的字段名称为pandas_dfs() 返回的spark dataframe中的字段，字段对应的格式为符合spark的格式。
-
-这里，由于pandas_dfs()功能只是选择若干特征，所以没有涉及到字段变化，具体的字段格式在进入pandas_dfs()之前已通过printSchema()打印。
-如果在pandas_dfs()中使用了pandas的reset_index()方法，且保存index，那么需要在schema变量中第一个字段处添加'index'字段及对应类型（下段代码注释
-内容）
-import pandas as pd
-from pyspark.sql.types import *
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import pandas_udf, PandasUDFType
- 
-spark = SparkSession.builder.appName("demo3").config("spark.some.config.option", "some-value").getOrCreate()
-df3 = spark.createDataFrame(
-    [(18862669710, '/未知类型', 'IM传文件', 'QQ接收文件', 39.0, '2018-03-08 21:45:45', 178111558222, 1781115582),
-     (18862669710, '/未知类型', 'IM传文件', 'QQ接收文件', 39.0, '2018-03-08 21:45:45', 178111558222, 1781115582),
-     (18862228190, '/移动终端', '移动终端应用', '移动腾讯视频', 292.0, '2018-03-08 21:45:45', 178111558212, 1781115582),
-     (18862669710, '/未知类型', '访问网站', '搜索引擎', 52.0, '2018-03-08 21:45:46', 178111558222, 1781115582)],
-    ('online_account', 'terminal_type', 'action_type', 'app', 'access_seconds', 'datetime', 'outid', 'class'))
- 
- 
-def compute(x):
-    result = x[
-        ['online_account', 'terminal_type', 'action_type', 'app', 'access_seconds', 'datetime', 'outid', 'class', 'start_time', 'end_time']]
-    return result
- 
- 
-schema = StructType([
-    # StructField("index", DoubleType()),
-    StructField("online_account", LongType()),
-    StructField("terminal_type", StringType()),
-    StructField("action_type", StringType()),
-    StructField("app", StringType()),
-    StructField("access_seconds", DoubleType()),
-    StructField("datetime", StringType()),
-    StructField("outid", LongType()),
-    StructField("class", LongType()),
-    StructField("end_time", TimestampType()),
-    StructField("start_time", TimestampType()),
- 
-])
- 
- 
-@pandas_udf(schema, functionType=PandasUDFType.GROUPED_MAP)
-def g(df):
-    print('ok')
-    mid = df.groupby(['online_account']).apply(lambda x: compute(x))
-    result = pd.DataFrame(mid)
- 
- 
-# result.reset_index(inplace=True, drop=False)
-# return result
-df3 = df3.withColumn("end_time", df3['datetime'].cast(TimestampType()))
-df3 = df3.withColumn('end_time_convert_seconds', df3['end_time'].cast('long').cast('int'))
-time_diff = df3.end_time_convert_seconds - df3.access_seconds
-df3 = df3.withColumn('start_time', time_diff.cast('int').cast(TimestampType()))
-df3 = df3.drop('end_time_convert_seconds')
-df3.printSchema()
-aa = df3.groupby(['online_account']).apply(g)
-aa.show()
-
-4.5.5 优化Pandas_UDF代码
+4.5.4 优化Pandas_UDF代码
 
 在上一小节中，我们是通过Spark方法进行特征的处理，然后对处理好的数据应用@pandas_udf装饰器调用自定义函数。但这样看起来有些凌乱，因此可以把这些Spark
 操作都写入pandas_udf方法中。
-注意：上小节中存在一个字段没有正确对应的bug，而pandas_udf方法返回的特征顺序要与schema中的字段顺序保持一致！
+
 
 import pandas as pd
 from pyspark.sql.types import *
@@ -986,7 +925,7 @@ aa = df3.groupby(['online_account']).apply(g)
 aa.show()
 
 
-4.5.6其他udf 函数应用示例
+4.5.5 其他udf 函数应用示例
 
 from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType
