@@ -767,14 +767,12 @@ from pyspark.sql.functions import col, pandas_udf
 from pyspark.sql.types import LongType
  
 # 声明函数并创建UDF
- 
-def multiply_func(a, b):
-    return a * b
- 
-multiply = pandas_udf(multiply_func, returnType=LongType())
- 
 x = pd.Series([1, 2, 3])
 df = spark.createDataFrame(pd.DataFrame(x, columns=["x"]))
+
+@pandas_udf('long', PandasUDFType.SCALAR) 
+def multiply_func(a, b):
+    return a * b
  
 # Execute function as a Spark vectorized UDF
 df.select(multiply(col("x"), col("x"))).show()
