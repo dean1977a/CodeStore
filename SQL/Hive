@@ -164,6 +164,34 @@ insert overwrite table sybq_etl_usr_buss_income_60002 partition(month) select * 
 
 18.抽样
 随机抽样20万
-create table 20W_phone as select msisdn from sybq_ods_usr_buss_income_60002  order by row_num asc,rand() limit 200000;
+create table IF NOT EXISTS 20w_random_phone (MSISDN string)
+location '/user/zh2_hw_zhjtuser/ShareData/CMSR/Application/wht/table/20w_random_phone';
+insert overwrite table 20w_random_phone
+SELECT t.msisdn
+FROM(
+    SELECT row_num,msisdn,rand(42) a
+    FROM sybq_ods_usr_buss_income_60002
+    where month='201910') t
+WHERE t.a BETWEEN 0.1 AND 0.3 limit 200000;
+
 块抽样20万
 create table 20W_phone as select msisdn from  sybq_ods_usr_buss_income_60002 tablesample(200000 rows);
+
+-------------系统抽样------------ 
+mod,rand() 依照userrid取模，分5组，每组随机抽取100个用户，实现如：
+
+依据user_id，取模，获取 mod_numd
+在mod_num组内然后随机排序，
+从各组取出20条
+
+select *  
+  from(  
+      select refund_id,user_id,mod_num,rank_num from 
+      (select refund_id,user_id,cast(10+rand()*100 as double) rank_num,
+        user_id%5 as mod_num 
+        from songpo_test)   
+      distribute by mod_num sort by mod_num,rank_num desc  
+      ) a  
+where row_number(mod_num)<=20;
+
+
