@@ -195,3 +195,9 @@ select *
 where row_number(mod_num)<=20;
 
 
+----------------去重--------------
+select id,month,flag from (select id,month,flag,row_number() 
+over (partition by id order by month desc) as rn from view1) t where t.rn = 1;
+
+
+
